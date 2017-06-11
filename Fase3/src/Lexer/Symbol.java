@@ -1,8 +1,14 @@
 package Lexer;
 
 public enum Symbol {
+<<<<<<< Updated upstream
     PROGRAM ("program"),
     DEF ("def"),
+=======
+    PROGRAM("program"),
+    POW("^"),
+    STRING("string"),
+>>>>>>> Stashed changes
     EOF("eof"),
     IDENT("Ident"),
     NUMBER("Number"),

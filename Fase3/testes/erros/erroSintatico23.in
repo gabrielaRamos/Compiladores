@@ -1,0 +1,13 @@
+program erroSintatico23:
+
+# Falta , entre parametros
+def a(int a int b):int{
+	return 0;
+}
+
+def main():void {
+	
+	return ;
+}
+
+end

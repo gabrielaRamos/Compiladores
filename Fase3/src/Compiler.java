@@ -27,6 +27,7 @@ public class Compiler {
 
     //Program ::= ’program’ Name ’:’ FuncDef {FuncDef} ’end’
     public Program program() {
+<<<<<<< Updated upstream
         if (lexer.token == Symbol.PROGRAM) {
             lexer.nextToken();
             name();
@@ -48,6 +49,9 @@ public class Compiler {
         } else {
             error.signal("Program Expected");
         }
+=======
+
+>>>>>>> Stashed changes
     }
 
     //Name ::= Letter{Letter | Digit}
@@ -327,8 +331,51 @@ public class Compiler {
         }
     }
 
-    //ExprStmt ::= Name[ ‘[’Number‘]’ ] ’=’ (OrTest | ’[’ ExprList ’]’) ’;’
+   // ExprStmt ::= Name [ ‘[’Atom‘]’ ] ’=’ (OrTest | ’[’OrList’]’) ’;’
     public ExprStmt exprStmt() {
+
+        name();
+        if (lexer.token == Symbol.LEFTSQBRACKET) {
+            lexer.nextToken();
+           atom();
+
+            if (lexer.token == Symbol.RIGHTSQBRACKET) {
+                lexer.nextToken();
+            } else {
+                error.signal("] expected.");
+            }
+        }
+        if (lexer.token == Symbol.ASSIGN) {
+            lexer.nextToken();
+
+            if (lexer.token == Symbol.NOT || lexer.token == Symbol.MINUS || lexer.token == Symbol.PLUS || lexer.token == Symbol.IDENT
+                    || lexer.token == Symbol.STRING || lexer.token == Symbol.NUMBER || lexer.token == Symbol.TRUE || lexer.token == Symbol.FALSE) {
+
+                orTest();
+
+            } else if (lexer.token == Symbol.LEFTSQBRACKET) {
+                lexer.nextToken();
+                orList();
+
+                if (lexer.token == Symbol.RIGHTSQBRACKET) {
+                    lexer.nextToken();
+                } else {
+                    error.signal("] expected.");
+                }
+            } else {
+                error.signal("orTest or ExprList exected.");
+            }
+            if (lexer.token == Symbol.SEMICOLON) {
+                lexer.nextToken();
+
+            } else {
+                error.signal("; expected");
+            }
+
+        } else {
+            error.signal("= expected.");
+        }
+
         return null;
     }
 
@@ -437,14 +484,101 @@ public class Compiler {
         return new Term(factor, sinal);
     }
 
-    //Factor ::= [’+’|’-’] Atom {^ Factor}
+    //Factor ::= [Signal] AtomExpr {’^’ Factor}
     public Factor factor() {
+
+<<<<<<< Updated upstream
+=======
+        if (lexer.token == Symbol.PLUS || lexer.token == Symbol.MINUS) {
+            lexer.nextToken();
+        }
+
+        atomExpr();
+
+        while (lexer.token == Symbol.POW) {
+            lexer.nextToken();
+            factor();
+        }
+
+        return null;
+>>>>>>> Stashed changes
+    }
+
+    //AtomExpr ::= Atom [Details]
+    public Atom atomExpr() {
+
+        atom();
+
+        if (lexer.token == Symbol.LEFTSQBRACKET) {
+            details();
+        }
+
+        return null;
+    }
+
+    //Atom ::= Name | Number | String | ’True’ | ’False’
+    public Atom atom() {
+
+<<<<<<< Updated upstream
+=======
+        if (lexer.token == Symbol.IDENT) {
+
+            name();
+        } else if (lexer.token == Symbol.NUMBER) {
+            number();
+        } else if (lexer.token == Symbol.STRING) {
+            string();
+        } else if (lexer.token == Symbol.TRUE) {
+            //lexer.nextToken();
+        } else if (lexer.token == Symbol.FALSE) {
+            //lexer.nextToken();
+        } else {
+            error.signal("NUMBER or STRING or BOOLEAN expected.");
+        }
+
+        return null;
 
     }
 
-    //Atom ::= Name[ ‘[’(Number | Name)‘]’ ] | Number | String | ’True’ | ’False’
-    public Atom atom() {
+    //Details ::= ‘[’(Number | Name)‘]’ | ’(’ [OrList] ’)’
+    public Details details() {
 
+        if (lexer.token == Symbol.LEFTSQBRACKET) {
+
+            lexer.nextToken();
+
+            if (lexer.token == Symbol.NUMBER) {
+                number();
+            } else if (lexer.token == Symbol.IDENT) {
+                name();
+            } else {
+                error.signal("Number or name expected.");
+            }
+
+            if (lexer.token == Symbol.RIGHTSQBRACKET) {
+                lexer.nextToken();
+            } else {
+                error.signal("] expected.");
+            }
+        }
+        if (lexer.token == Symbol.LEFTPAR) {
+            lexer.nextToken();
+
+            if (lexer.token == Symbol.NOT || lexer.token == Symbol.MINUS || lexer.token == Symbol.PLUS || lexer.token == Symbol.IDENT
+                    || lexer.token == Symbol.STRING || lexer.token == Symbol.NUMBER || lexer.token == Symbol.TRUE || lexer.token == Symbol.FALSE) {
+
+                orList();
+            }
+
+            if (lexer.token == Symbol.RIGHTPAR) {
+                lexer.nextToken();
+            } else {
+                error.signal(") expected.");
+            }
+        }
+
+        return null;
+>>>>>>> Stashed changes
     }
 
     //Number ::= [Signal] Digit{Digit} [’.’ Digit{Digit}]
@@ -558,6 +692,65 @@ public class Compiler {
             error.signal("BREAK expected");
         }
         return new BreakStmt();
+    }
+
+    //ReturnStmt ::= ’return’ [OrTest]’;’
+    public ReturnStmt returnStmt() {
+        if (lexer.token == Symbol.RETURN) {
+            lexer.nextToken();
+
+            if (lexer.token == Symbol.NOT || lexer.token == Symbol.MINUS || lexer.token == Symbol.PLUS || lexer.token == Symbol.IDENT
+                    || lexer.token == Symbol.STRING || lexer.token == Symbol.NUMBER || lexer.token == Symbol.TRUE || lexer.token == Symbol.FALSE) {
+
+                orTest();
+            }
+
+            if (lexer.token == Symbol.SEMICOLON) {
+                lexer.nextToken();
+
+            } else {
+                error.signal("; expected.");
+            }
+
+        } else {
+            error.signal("'Return' expected.");
+        }
+
+        return null;
+    }
+
+    //FuncStmt ::= Name’(’ [OrList] ’)”;’
+    public FuncStmt funcStmt() {
+        name();
+
+        if (lexer.token == Symbol.LEFTPAR) {
+            lexer.nextToken();
+
+            if (lexer.token == Symbol.NOT || lexer.token == Symbol.MINUS || lexer.token == Symbol.PLUS || lexer.token == Symbol.IDENT
+                    || lexer.token == Symbol.STRING || lexer.token == Symbol.NUMBER || lexer.token == Symbol.TRUE || lexer.token == Symbol.FALSE) {
+
+                orTest();
+            }
+
+            if (lexer.token == Symbol.RIGHTPAR) {
+                lexer.nextToken();
+
+                if (lexer.token == Symbol.SEMICOLON) {
+                    lexer.nextToken();
+
+                } else {
+                    error.signal("; expected.");
+
+                }
+            } else {
+                error.signal(") expected.");
+            }
+
+        } else {
+            error.signal("( expected.");
+        }
+
+        return null;
     }
 
     //CompoundStmt ::= IfStmt | WhileStmt | ForStmt
