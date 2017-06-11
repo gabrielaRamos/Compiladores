@@ -1,6 +1,6 @@
 /*Nome: Alessia Melo    RA:620289
         Gabriela Ramos  RA:620360
-*/
+ */
 import AST.Program;
 import AST.*;
 import java.util.*;
@@ -14,6 +14,7 @@ public class Compiler {
     public CompilerError error;
     private boolean flagLoop;
     private boolean flagVetorAtomCol = false;
+
     public Program compile(char[] input, PrintWriter outError, String fileName) {
         symbolTable = new Hashtable<String, Variable>();
         error = new CompilerError(outError, fileName);
@@ -22,10 +23,31 @@ public class Compiler {
         lexer.nextToken();
         return program();
     }
+    //VERIFICAR SE É NECESSÁRIO USAR O TRY CATCH
 
-    //Program ::= ’program’ Name ’:’ Body ’end’
+    //Program ::= ’program’ Name ’:’ FuncDef {FuncDef} ’end’
     public Program program() {
-      
+        if (lexer.token == Symbol.PROGRAM) {
+            lexer.nextToken();
+            name();
+            if (lexer.token == Symbol.COLON) {
+                lexer.nextToken();
+                funcDef();
+                while (lexer.token == Symbol.DEF) {
+                    funcDef();
+                }
+                if (lexer.token == Symbol.END) {
+                    lexer.nextToken();
+                    //Conferir se main foi declarada
+                } else {
+                    error.signal("end expected");
+                }
+            } else {
+                error.signal(": expected");
+            }
+        } else {
+            error.signal("Program Expected");
+        }
     }
 
     //Name ::= Letter{Letter | Digit}
@@ -38,6 +60,71 @@ public class Compiler {
         lexer.nextToken();
 
         return new Name(str);
+    }
+
+    public void funcDef() {
+        if (lexer.token == Symbol.DEF) {
+            lexer.nextToken();
+            name();
+            if (lexer.token == Symbol.LEFTPAR) {
+                lexer.nextToken();
+                if (lexer.token == Symbol.BOOLEAN) {
+                    argsList();
+                }
+
+                if (lexer.token == Symbol.RIGHTPAR) {
+                    lexer.nextToken();
+
+                    if (lexer.token == Symbol.COLON) {
+                        lexer.nextToken();
+
+                        type();
+
+                        if (lexer.token == Symbol.CURLYLEFTBRACE) {
+                            lexer.nextToken();
+                            body();
+                            if (lexer.token == Symbol.CURLYRIGHTBRACE) {
+                                lexer.nextToken();
+                            } else {
+                                error.signal("} expected");
+                            }
+                        } else {
+                            error.signal("{ expected");
+                        }
+                    } else {
+                        error.signal(": expected");
+                    }
+                } else {
+                    error.signal(") expected");
+                }
+            } else {
+                error.signal("( expected");
+            }
+        }
+    }
+
+    public void argsList() {
+        type();
+        nameArray();
+
+        while (lexer.token == Symbol.COMMA) {
+            lexer.nextToken();
+            type();
+            nameArray();
+        }
+    }
+
+    public void nameArray() {
+        name();
+        if (lexer.token == Symbol.LEFTSQBRACKET) {
+            lexer.nextToken();
+            numberExpr();
+            if (lexer.token == Symbol.RIGHTSQBRACKET) {
+                lexer.nextToken();
+            } else {
+                error.signal("] expected");
+            }
+        }
     }
 
     //Signal ::= ’+’ | ’-’
@@ -164,8 +251,7 @@ public class Compiler {
     }
 
     //Type ::= ’int’ | ’float’ | ’string’ | ’boolean’
-   
-   //TYPE VOID  
+    //TYPE VOID  
     public Type type() {
         Type result;
 
@@ -179,6 +265,8 @@ public class Compiler {
             result = Type.floatType;
         } else if (lexer.token == Symbol.STRING) {
             result = Type.stringType;
+        } else if (lexer.token == Symbol.VOID) {
+            result = Type.voidType;
         } else {
             error.signal("Type expected");
             result = null;
@@ -187,9 +275,13 @@ public class Compiler {
         return result;
     }
 
-//IdList ::= Name [ ‘[’Number‘]’ ] {’,’ Name [ ‘[’Number‘]’ ]}
-    public ArrayList<String> idList() {
-
+//IdList ::= NameArray {’,’ NameArray}
+    public void idList() {
+        nameArray();
+        while (lexer.token == Symbol.COMMA) {
+            lexer.nextToken();
+            nameArray();
+        }
     }
 
     //Stmt ::= SimpleStmt | CompoundStmt
@@ -224,6 +316,11 @@ public class Compiler {
             }
             return breakStmt();
 
+        } else if (lexer.token == Symbol.RETURN) {
+            return returnStmt();
+            
+        } else if (lexer.token == Symbol.FUNCTION) {
+            return funcStmt();
         } else {
             error.signal("SIMPLE STATEMENT expected");
             return null;
@@ -264,12 +361,12 @@ public class Compiler {
             not = "not";
             lexer.nextToken();
             Comparison comp = comparison();
-            if(comp.getType() == Type.stringType){
+            if (comp.getType() == Type.stringType) {
                 error.signal("Not is not allowed with strings");
             }
-             return new NotTest(not,comp);
+            return new NotTest(not, comp);
         }
-        return new NotTest(not,comparison());
+        return new NotTest(not, comparison());
 
     }
 
@@ -285,11 +382,11 @@ public class Compiler {
             op = compOp();
             expr2 = expr();
             boolean flagExpr2 = flagVetorAtomCol;
-      
-            if((expr1.getType() != expr2.getType()) || ( (flagExpr1 == true|| flagExpr2 == true) && expr1.getType() == expr2.getType())){
+
+            if ((expr1.getType() != expr2.getType()) || ((flagExpr1 == true || flagExpr2 == true) && expr1.getType() == expr2.getType())) {
                 error.signal("Comparison not allowed");
             }
-            
+
         }
         return new Comparison(expr1, expr2, op);
     }
@@ -312,7 +409,7 @@ public class Compiler {
             if (term.get(0).getType().getcName().equals(term.get(i).getType().getcName()) == false) {
                 error.signal("Types are different");
             }
-        }  
+        }
         return new CompositeExpr(term, sinal);
     }
 
@@ -320,9 +417,9 @@ public class Compiler {
     public Term term() {
         ArrayList<Factor> factor = new ArrayList<Factor>();
         ArrayList<Character> sinal = new ArrayList<Character>();
-        
+
         factor.add(factor());
-        
+
         while (lexer.token == Symbol.MULT || lexer.token == Symbol.DIV) {
             if (lexer.token == Symbol.MULT) {
                 sinal.add('*');
@@ -336,18 +433,18 @@ public class Compiler {
             if (factor.get(0).atom.type.getcName().equals(factor.get(i).atom.type.getcName()) == false) {
                 error.signal("Types are different");
             }
-        }   
+        }
         return new Term(factor, sinal);
     }
 
     //Factor ::= [’+’|’-’] Atom {^ Factor}
     public Factor factor() {
-      
+
     }
 
     //Atom ::= Name[ ‘[’(Number | Name)‘]’ ] | Number | String | ’True’ | ’False’
     public Atom atom() {
-  
+
     }
 
     //Number ::= [Signal] Digit{Digit} [’.’ Digit{Digit}]

@@ -1,6 +1,8 @@
 package Lexer;
 
 public enum Symbol {
+    PROGRAM ("program"),
+    DEF ("def"),
     EOF("eof"),
     IDENT("Ident"),
     NUMBER("Number"),
