@@ -27,7 +27,7 @@ public class Compiler {
 
     //Program ::= ’program’ Name ’:’ FuncDef {FuncDef} ’end’
     public Program program() {
-<<<<<<< Updated upstream
+
         if (lexer.token == Symbol.PROGRAM) {
             lexer.nextToken();
             name();
@@ -49,9 +49,6 @@ public class Compiler {
         } else {
             error.signal("Program Expected");
         }
-=======
-
->>>>>>> Stashed changes
     }
 
     //Name ::= Letter{Letter | Digit}
@@ -487,8 +484,6 @@ public class Compiler {
     //Factor ::= [Signal] AtomExpr {’^’ Factor}
     public Factor factor() {
 
-<<<<<<< Updated upstream
-=======
         if (lexer.token == Symbol.PLUS || lexer.token == Symbol.MINUS) {
             lexer.nextToken();
         }
@@ -501,7 +496,7 @@ public class Compiler {
         }
 
         return null;
->>>>>>> Stashed changes
+
     }
 
     //AtomExpr ::= Atom [Details]
@@ -519,8 +514,6 @@ public class Compiler {
     //Atom ::= Name | Number | String | ’True’ | ’False’
     public Atom atom() {
 
-<<<<<<< Updated upstream
-=======
         if (lexer.token == Symbol.IDENT) {
 
             name();
@@ -578,7 +571,7 @@ public class Compiler {
         }
 
         return null;
->>>>>>> Stashed changes
+
     }
 
     //Number ::= [Signal] Digit{Digit} [’.’ Digit{Digit}]
