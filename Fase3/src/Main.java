@@ -44,7 +44,7 @@ public class Main {
                 
             if ( numChRead != file.length() ) {
                 System.out.println("Read error");
-                return ;
+                return ;                
             }
             try {
               stream.close();

@@ -75,30 +75,30 @@ public class Lexer {
 
     static {
         keywordsTable = new Hashtable<String, Symbol>();
-        keywordsTable.put("var", Symbol.VAR);
-        keywordsTable.put("begin", Symbol.BEGIN);
         keywordsTable.put("end", Symbol.END);
         keywordsTable.put("if", Symbol.IF);
         keywordsTable.put("then", Symbol.THEN);
         keywordsTable.put("else", Symbol.ELSE);
         keywordsTable.put("endif", Symbol.ENDIF);
-        keywordsTable.put("read", Symbol.READ);
-        keywordsTable.put("write", Symbol.WRITE);
-        keywordsTable.put("integer", Symbol.INTEGER);
         keywordsTable.put("boolean", Symbol.BOOLEAN);
         keywordsTable.put("char", Symbol.CHAR);
         keywordsTable.put("true", Symbol.TRUE);
-        keywordsTable.put("false", Symbol.FALSE);
+        keywordsTable.put("false", Symbol.FALSE);        
         keywordsTable.put("and", Symbol.AND);
         keywordsTable.put("or", Symbol.OR);
-        keywordsTable.put("not", Symbol.NOT);
-        keywordsTable.put("procedure", Symbol.PROCEDURE);
-        keywordsTable.put("function", Symbol.FUNCTION);
+        keywordsTable.put("not", Symbol.NOT);      
         keywordsTable.put("for", Symbol.FOR);
-        keywordsTable.put("while", Symbol.WHILE);
-        keywordsTable.put("to", Symbol.TO);
-        keywordsTable.put("do", Symbol.DO);
+        keywordsTable.put("while", Symbol.WHILE);      
         keywordsTable.put("return", Symbol.RETURN);
+        
+        keywordsTable.put("break", Symbol.BREAK);
+        keywordsTable.put("def", Symbol.DEF);
+        keywordsTable.put("float", Symbol.FLOAT);
+        keywordsTable.put("inrange", Symbol.INRANGE);
+        keywordsTable.put("int", Symbol.INT);
+        keywordsTable.put("print", Symbol.PRINT);
+        keywordsTable.put("program", Symbol.PROGRAM);
+        keywordsTable.put("string", Symbol.STRING);
     }
 
     public void nextToken() {
@@ -113,7 +113,7 @@ public class Lexer {
         }
         if (ch == '\0') {
             token = Symbol.EOF;
-        } else if (input[tokenPos] == '/' && input[tokenPos + 1] == '/') {
+        } else if (input[tokenPos] == '#') {
 // comment found
             while (input[tokenPos] != '\0' && input[tokenPos] != '\n') {
                 tokenPos++;
