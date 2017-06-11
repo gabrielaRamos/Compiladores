@@ -1,0 +1,6 @@
+program erroSemantico3:
+
+# Vetor com tamanho negativo
+string tamanho[-10];
+
+end

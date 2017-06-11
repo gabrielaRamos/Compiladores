@@ -1,0 +1,8 @@
+program erroSemantico4:
+
+int b;
+
+# Atribuicao com tipo incorreto
+b = 12.35;
+
+end

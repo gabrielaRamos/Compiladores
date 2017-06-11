@@ -1,0 +1,6 @@
+program erroSemantico9:
+
+# Emprego de palavra reservada
+string int;
+
+end

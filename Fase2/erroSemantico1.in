@@ -1,0 +1,6 @@
+program erroSemantico1:
+
+# Uso de variavel nao declarada
+a = 1;
+
+end

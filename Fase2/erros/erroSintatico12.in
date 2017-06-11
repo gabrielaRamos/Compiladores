@@ -1,0 +1,15 @@
+program erroSintatico12:
+
+int a;
+float x;
+string c, d;
+
+# Falta valor depois de =
+a = ;
+x = 31.23456;
+c = '!';
+d = 'Ola Mundo';
+
+print 'Hello, world', c;
+
+end

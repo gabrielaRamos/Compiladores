@@ -1,0 +1,5 @@
+program acertoSintatico1:
+
+print 'Hello, world!';
+
+end

@@ -1,0 +1,6 @@
+program erroLexico1:
+
+# Palavra inexistente na linguagem
+long x;
+
+end

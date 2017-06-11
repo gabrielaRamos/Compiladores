@@ -1,0 +1,10 @@
+program erroLexico2:
+
+int i;
+
+# While: palavra inexistente na linguagem, palavras reservadas devem estar em minusculo
+While i < 10 {
+	
+}
+
+end

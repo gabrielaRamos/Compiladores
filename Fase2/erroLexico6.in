@@ -1,0 +1,8 @@
+program erroLexico6:
+
+int a;
+
+# Numero fora dos limites
+a = 7000000000000000000;
+
+end

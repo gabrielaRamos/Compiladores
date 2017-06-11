@@ -1,0 +1,8 @@
+program erroSemantico7:
+
+int numero;
+
+# Variavel nao declarada (linguagem case sensitive)
+Numero = 21;
+
+end

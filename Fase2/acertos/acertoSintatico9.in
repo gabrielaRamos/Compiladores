@@ -1,0 +1,27 @@
+program acertoSintatico9:
+
+int alist[10], passnum, i, iPlus, temp;
+boolean exchanges;
+
+alist = [20,30,40,90,50,60,70,80,100,110];
+exchanges = True;
+passnum = 9;
+
+while passnum > 0 and exchanges == True{
+  exchanges = False;
+  for i in range(0, passnum){
+    iPlus = i + 1;
+    if alist[i] > alist[iPlus]{
+      exchanges = True;
+      temp = alist[i];
+      alist[i] = alist[iPlus];
+      alist[iPlus] = temp;
+    }
+  }
+   passnum = passnum - 1;
+}
+
+# Printa a lista alist inteira
+print alist
+
+end

@@ -1,0 +1,6 @@
+program erroSemantico2:
+
+# Redeclaracao de variavel
+int a, a[10];
+
+end

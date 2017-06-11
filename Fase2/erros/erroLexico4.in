@@ -1,0 +1,6 @@
+program erroLexico4:
+
+# Simbolo invalido
+int abcd-efgh;
+
+end

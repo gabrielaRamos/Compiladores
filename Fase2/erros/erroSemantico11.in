@@ -1,0 +1,10 @@
+program erroSemantico11:
+
+string text;
+text = 'My crazy test';
+
+# Operador not aplicado a string
+if not text {
+}
+
+end

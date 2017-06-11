@@ -1,0 +1,6 @@
+program erroSemantico12:
+
+# Vetor com tamanho real
+int value[10.213];
+
+end

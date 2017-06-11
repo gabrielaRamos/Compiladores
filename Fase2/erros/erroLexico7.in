@@ -1,0 +1,11 @@
+program erroLexico7:
+
+int a, b;
+a = 7;
+b = 4;
+
+# Operador invalido
+if a != b{
+}
+
+end

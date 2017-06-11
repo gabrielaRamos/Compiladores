@@ -1,0 +1,10 @@
+program erroSemantico14:
+
+int alist[4];
+
+alist = [20,30,40,90];
+
+# Posicao invalida do vetor
+print alist[7];
+
+end

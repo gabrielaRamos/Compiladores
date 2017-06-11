@@ -1,0 +1,15 @@
+program erroSintatico2:
+
+# Falta ; na declaracao
+int a
+float x;
+string c, d;
+
+a = 1;
+x = 31.23456;
+c = '!';
+d = 'Ola Mundo';
+
+print 'Hello, world', c;
+
+end

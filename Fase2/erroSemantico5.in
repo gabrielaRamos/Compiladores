@@ -1,0 +1,9 @@
+program erroSemantico5:
+
+int var;
+int vet[10];
+
+# Atribuicao de tipos incompativeis
+var = vet;
+
+end

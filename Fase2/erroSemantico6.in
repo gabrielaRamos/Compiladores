@@ -1,0 +1,7 @@
+program erroSemantico6:
+
+# Redeclaracao de variavel
+int a;
+string a;
+
+end

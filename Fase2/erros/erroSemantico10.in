@@ -1,0 +1,11 @@
+program erroSemantico10:
+
+int num1;
+int num2;
+
+# Break fora de while
+if num1 > num2 {
+	break;
+}
+
+end

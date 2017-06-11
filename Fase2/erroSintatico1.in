@@ -1,0 +1,6 @@
+program erroSintatico1:
+
+# Falta fechar aspas no print
+print 'Hello, world!;
+
+end

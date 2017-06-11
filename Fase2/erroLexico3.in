@@ -1,0 +1,6 @@
+program erroLexico3:
+
+# Simbolo invalido
+boolean ab@_10;
+
+end
