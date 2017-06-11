@@ -33,9 +33,11 @@ public enum Symbol {
     READ("read"),
     WRITE("write"),
     COLON(":"),
-    INTEGER("integer"),
+    INT("int"),
+    FLOAT("float"),
     BOOLEAN("boolean"),
     CHAR("char"),
+    VOID("void"),
     CHARACTER("character"),
     TRUE("true"),
     FALSE("false"),
@@ -53,6 +55,9 @@ public enum Symbol {
     // other symbols
     FOR("for"),
     WHILE("while"),
+    PRINT("print"),
+    BREAK("break"),
+    INRANGE("inrange"),
     TO("to"),
     DO("do"),
     RETURN("return");

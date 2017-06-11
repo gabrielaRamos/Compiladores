@@ -1,6 +1,7 @@
 /*Nome: Alessia Melo    RA:620289
         Gabriela Ramos  RA:620360
  */
+import AST.Variable;
 import AST.Program;
 import AST.*;
 import java.util.*;
@@ -52,7 +53,7 @@ public class Compiler {
     }
 
     //Name ::= Letter{Letter | Digit}
-    public Name name() {
+    public void name() {
         String str = lexer.getStringValue();
 
         if (str == null) {
@@ -60,7 +61,7 @@ public class Compiler {
         }
         lexer.nextToken();
 
-        return new Name(str);
+      //  return new Name(str);
     }
 
     public void funcDef() {
@@ -147,8 +148,8 @@ public class Compiler {
     }
 
     //Body ::= [Declaration] {Stmt}    
-    public Body body() {
-        ArrayList<Statement> stmt = new ArrayList<Statement>();
+    public void body() {
+       /* ArrayList<Statement> stmt = new ArrayList<Statement>();*/
         Declaration dec = null;
 
         if (lexer.token == Symbol.INT || lexer.token == Symbol.FLOAT || lexer.token == Symbol.STRING || lexer.token == Symbol.BOOLEAN || lexer.token == Symbol.IDENT) {
@@ -157,14 +158,14 @@ public class Compiler {
 
         while (lexer.token == Symbol.IDENT || lexer.token == Symbol.PRINT || lexer.token == Symbol.BREAK
                 || lexer.token == Symbol.IF || lexer.token == Symbol.WHILE || lexer.token == Symbol.FOR) {
-
-            stmt.add(stmt());
+            stmt();
+            //stmt.add(stmt());
         }
-        return new Body(dec, stmt);
+     //   return new Body(dec, stmt);
     }
 
     //Declaration ::= Type IdList ’;’{ Type IdList’;’} 
-    public Declaration declaration() {
+    public void declaration() {
         ArrayList<Variable> var = new ArrayList<Variable>();
         Type type;
         ArrayList<String> id = new ArrayList<String>();
@@ -302,7 +303,6 @@ public class Compiler {
     }
 
     //SimpleStmt ::= ExprStmt | PrintStmt | BreakStmt
-    //ALTERAR
     public Statement simpleStmt() {
         if (lexer.token == Symbol.IDENT) {
             return exprStmt();
@@ -518,7 +518,7 @@ public class Compiler {
 
             name();
         } else if (lexer.token == Symbol.NUMBER) {
-            number();
+            numberExpr();
         } else if (lexer.token == Symbol.STRING) {
             string();
         } else if (lexer.token == Symbol.TRUE) {
@@ -541,7 +541,7 @@ public class Compiler {
             lexer.nextToken();
 
             if (lexer.token == Symbol.NUMBER) {
-                number();
+                numberExpr();
             } else if (lexer.token == Symbol.IDENT) {
                 name();
             } else {
@@ -771,13 +771,13 @@ public class Compiler {
 
             orT = orTest();
 
-            if (lexer.token == Symbol.LEFTKEY) {
+            if (lexer.token == Symbol.CURLYLEFTBRACE) {
                 lexer.nextToken();
                 while (lexer.token == Symbol.IDENT || lexer.token == Symbol.PRINT || lexer.token == Symbol.BREAK
                         || lexer.token == Symbol.IF || lexer.token == Symbol.WHILE || lexer.token == Symbol.FOR) {
                     stmt1.add(stmt());
                 }
-                if (lexer.token == Symbol.RIGHTKEY) {
+                if (lexer.token == Symbol.CURLYRIGHTBRACE) {
                     lexer.nextToken();
 
                 } else {
@@ -790,13 +790,13 @@ public class Compiler {
 
             if (lexer.token == Symbol.ELSE) {
                 lexer.nextToken();
-                if (lexer.token == Symbol.LEFTKEY) {
+                if (lexer.token == Symbol.CURLYLEFTBRACE) {
                     lexer.nextToken();
                     while (lexer.token == Symbol.IDENT || lexer.token == Symbol.PRINT || lexer.token == Symbol.BREAK
                             || lexer.token == Symbol.IF || lexer.token == Symbol.WHILE || lexer.token == Symbol.FOR) {
                         stmt2.add(stmt());
                     }
-                    if (lexer.token == Symbol.RIGHTKEY) {
+                    if (lexer.token == Symbol.CURLYRIGHTBRACE) {
                         lexer.nextToken();
 
                     } else {
@@ -822,13 +822,13 @@ public class Compiler {
             lexer.nextToken();
 
             orT = orTest();
-            if (lexer.token == Symbol.LEFTKEY) {
+            if (lexer.token == Symbol.CURLYLEFTBRACE) {
                 lexer.nextToken();
                 while (lexer.token == Symbol.IDENT || lexer.token == Symbol.PRINT || lexer.token == Symbol.BREAK
                         || lexer.token == Symbol.IF || lexer.token == Symbol.ELSE || lexer.token == Symbol.WHILE || lexer.token == Symbol.FOR) {
                     stmt.add(stmt());
                 }
-                if (lexer.token == Symbol.RIGHTKEY) {
+                if (lexer.token == Symbol.CURLYRIGHTBRACE) {
                     lexer.nextToken();
                     flagLoop = false;
                     return new whileStatement(orT, stmt);
@@ -876,13 +876,13 @@ public class Compiler {
                         }
                         if (lexer.token == Symbol.RIGHTPAR) {
                             lexer.nextToken();
-                            if (lexer.token == Symbol.LEFTKEY) {
+                            if (lexer.token == Symbol.CURLYLEFTBRACE) {
                                 lexer.nextToken();
                                 while (lexer.token == Symbol.IDENT || lexer.token == Symbol.PRINT || lexer.token == Symbol.BREAK
                                         || lexer.token == Symbol.IF || lexer.token == Symbol.WHILE || lexer.token == Symbol.FOR) {
                                     stmt.add(stmt());
                                 }
-                                if (lexer.token == Symbol.RIGHTKEY) {
+                                if (lexer.token == Symbol.CURLYRIGHTBRACE) {
 
                                     lexer.nextToken();
                                     //ForStatement(Name name, Number number1, Number number2, ArrayList<Statement> stmt) 

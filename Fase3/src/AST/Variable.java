@@ -10,10 +10,6 @@ package AST;
  *
  * @author Gabriela Ramos
  */
-public class Program {
-
-    public void genC(PW pw) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public class Variable {
     
 }
