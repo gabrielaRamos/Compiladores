@@ -698,7 +698,7 @@ public class Compiler {
     }
     
     //OrList ::= OrTest {’,’ OrTest}
-    public void OrList()
+    public void orList()
     {        
         orTest();
         
