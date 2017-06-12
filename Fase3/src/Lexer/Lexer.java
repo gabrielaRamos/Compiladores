@@ -1,7 +1,7 @@
 package Lexer;
 
 import java.util.*;
-import AuxComp.*;
+//import AuxComp.*;
 
 public class Lexer {
 
@@ -82,8 +82,9 @@ public class Lexer {
         keywordsTable.put("endif", Symbol.ENDIF);
         keywordsTable.put("boolean", Symbol.BOOLEAN);
         keywordsTable.put("char", Symbol.CHAR);
-        keywordsTable.put("true", Symbol.TRUE);
-        keywordsTable.put("false", Symbol.FALSE);        
+        keywordsTable.put("void", Symbol.VOID);
+        keywordsTable.put("True", Symbol.TRUE);
+        keywordsTable.put("False", Symbol.FALSE);        
         keywordsTable.put("and", Symbol.AND);
         keywordsTable.put("or", Symbol.OR);
         keywordsTable.put("not", Symbol.NOT);      
@@ -216,13 +217,30 @@ public class Lexer {
                         token = Symbol.COLON;
                         break;
                     case '\'':
-                        token = Symbol.CHARACTER;
-                        charValue = input[tokenPos];
-                        tokenPos++;
-                        if (input[tokenPos] != '\'') {
-                            error.signal("Illegal literal character" + input[tokenPos - 1]);
-                        }
-                        tokenPos++;
+                         if (input[tokenPos + 1] == '\'') {
+                                token = Symbol.CHARACTER;
+                                charValue = input[tokenPos];
+                                tokenPos++;
+                                if (input[tokenPos] != '\'') {
+                                    error.signal("Illegal literal character" + input[tokenPos - 1]);
+                                }
+                            } else {
+
+                                token = Symbol.STRING;
+                                StringBuffer str = new StringBuffer();
+                                while (input[tokenPos] != '\'' && input[tokenPos]!='\0') {
+                                    str.append(input[tokenPos]);
+
+                                    tokenPos++;
+                                }
+                                stringValue = str.toString();
+                                if (input[tokenPos] != '\'') {
+                                    error.signal("Illegal literal character" + input[tokenPos - 1]);
+                                }
+
+                            }
+
+                            tokenPos++;
                         break;
 // the next four symbols are not used by the language
 // but are returned to help the error treatment
@@ -240,11 +258,15 @@ public class Lexer {
                     case ']':
                         token = Symbol.RIGHTSQBRACKET;
                         break;
+                    case '^':
+                        token = Symbol.POW;
+                        break;
                     default:
                         error.signal("Invalid Character: ’" + ch + "’");
                 }
             }
         }
+        System.out.println(token);
         beforeLastTokenPos = lastTokenPos;
         lastTokenPos = tokenPos - 1;
     }// return the line number of the last token got with getToken()
