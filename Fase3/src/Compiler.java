@@ -697,7 +697,8 @@ public class Compiler {
     }
 
     //OrList ::= OrTest {’,’ OrTest}
-    public void orList() {
+    public void orList(){
+
         orTest();
 
         while (lexer.token == Symbol.COMMA) {
