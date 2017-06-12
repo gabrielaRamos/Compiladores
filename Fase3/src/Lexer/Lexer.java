@@ -89,8 +89,7 @@ public class Lexer {
         keywordsTable.put("not", Symbol.NOT);      
         keywordsTable.put("for", Symbol.FOR);
         keywordsTable.put("while", Symbol.WHILE);      
-        keywordsTable.put("return", Symbol.RETURN);
-        
+        keywordsTable.put("return", Symbol.RETURN);        
         keywordsTable.put("break", Symbol.BREAK);
         keywordsTable.put("def", Symbol.DEF);
         keywordsTable.put("float", Symbol.FLOAT);

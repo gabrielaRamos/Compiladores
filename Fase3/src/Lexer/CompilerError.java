@@ -1,10 +1,12 @@
+package Lexer;
+
 
 import Lexer.*;
 import java.io.*;
 
 public class CompilerError {
 
-    public CompilerError(Lexer lexer, PrintWriter out) {
+    public CompilerError(Lexer lexer, PrintWriter out, String fileName) {
 // output of an error is done in out
         this.lexer = lexer;
         this.out = out;

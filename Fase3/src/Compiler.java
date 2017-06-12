@@ -1,6 +1,7 @@
 /*Nome: Alessia Melo    RA:620289
         Gabriela Ramos  RA:620360
  */
+import Lexer.CompilerError;
 import AST.Variable;
 import AST.Program;
 import AST.*;
@@ -18,8 +19,8 @@ public class Compiler {
 
     public Program compile(char[] input, PrintWriter outError, String fileName) {
         symbolTable = new Hashtable<String, Variable>();
-        error = new CompilerError(outError, fileName);
-        lexer = new Lexer(input, error);
+        error = new CompilerError(lexer, new PrintWriter(outError), fileName);   
+        lexer = new Lexer(input, error);             
         error.setLexer(lexer);
         lexer.nextToken();
         return program();
@@ -50,6 +51,8 @@ public class Compiler {
         } else {
             error.signal("Program Expected");
         }
+        
+        return new Program();
     }
 
     //Name ::= Letter{Letter | Digit}
@@ -166,7 +169,36 @@ public class Compiler {
 
     //Declaration ::= Type IdList ’;’{ Type IdList’;’} 
     public void declaration() {
-        ArrayList<Variable> var = new ArrayList<Variable>();
+        
+        type();
+        idList();
+        if (lexer.token == Symbol.SEMICOLON) {  
+            lexer.nextToken();
+            
+            while(lexer.token == Symbol.INT || lexer.token == Symbol.BOOLEAN || lexer.token == Symbol.CHAR || lexer.token == Symbol.FLOAT || lexer.token == Symbol.STRING || lexer.token == Symbol.VOID  )
+            {
+                type();
+                idList();
+                        
+                  if (lexer.token == Symbol.SEMICOLON) {
+                      lexer.nextToken();
+                  }  
+                  else
+                  {
+                      error.signal("; expected.");
+                  }
+                
+            }
+        }
+        else
+        {
+            error.signal("; expected.");
+        }
+        
+        
+        
+        
+       /* ArrayList<Variable> var = new ArrayList<Variable>();
         Type type;
         ArrayList<String> id = new ArrayList<String>();
         String variable;
@@ -249,7 +281,7 @@ public class Compiler {
             }
         }
 
-        return new Declaration(var);
+        return new Declaration(var);*/
     }
 
     //Type ::= ’int’ | ’float’ | ’string’ | ’boolean’
@@ -373,7 +405,7 @@ public class Compiler {
             error.signal("= expected.");
         }
 
-        return null;
+        //return null;
     }
 
     //OrTest ::= AndTest {’or’ AndTest}
@@ -598,9 +630,12 @@ public class Compiler {
 
         }
         
-        flag = lexer.isIntOrFloat();
-        if (flag == 1) {
-            valueFloat = lexer.getNumberValueFloat();
+        valueInt = lexer.getNumberValue();
+        
+//        flag = lexer.isIntOrFloat();
+        /*if (flag == 1) {
+            
+           // valueFloat = lexer.getNumberValueFloat();
             if (Lexer.MaxValueInteger - 1 == valueFloat) {
                 error.signal("Number expected");
             }
@@ -611,10 +646,10 @@ public class Compiler {
             if (Lexer.MaxValueInteger - 1 == valueInt) {
                 error.signal("Number expected");
             }
-            lexer.nextToken();
+            lexer.nextToken();*/
 
       //      return new numberExpr(sinal, valueInt);
-        }
+       // }
     }
 
     // String ::= ”’ . ”’
@@ -660,6 +695,18 @@ public class Compiler {
             error.signal("> or < or == or >= or <= or <> expected");
         }
         return null;
+    }
+    
+    //OrList ::= OrTest {’,’ OrTest}
+    public void OrList()
+    {        
+        orTest();
+        
+        while(lexer.token == Symbol.COMMA)
+        {
+            lexer.nextToken();
+            orTest();
+        }
     }
 
     //PrintStmt ::= ’print’ OrTest {’,’ OrTest}’;’
