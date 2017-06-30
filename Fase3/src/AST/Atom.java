@@ -28,15 +28,14 @@ public class Atom extends Expr {
 
     @Override
     public void genC(PW pw) {
-        ArrayList<NameArray> names = new ArrayList<NameArray>();
+        
         this.flagVariable = 0;
         if (PrintStmt.print == 1) {
             if (Declaration.var != null) {
                 for (int i = 0; i < Declaration.var.size(); i++) {
-                    for(int j= 0; j < Declaration.var.get(i).getArrayDec().size(); j++){
+                    for(int j= 0; j < Declaration.var.get(i).getIdList().getNameArray().size(); j++){
                         //percorrer
-                        names = Declaration.var.get(i).getArrayDec();
-                        if (names.get(j).getNameArray().equals(this.atom)){
+                        if (Declaration.var.get(i).getIdList().getNameArray().get(j).equals(this.atom)){
                         var = Declaration.var.get(i);
                         //existe variable
                         flagVariable = 1;

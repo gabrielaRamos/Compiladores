@@ -26,7 +26,9 @@ public class ArrayDeclaration {
     public void genCArray(PW pw){
         idList.genC(pw);
     }
-    public ArrayList getArrayDec(){
-        return idList.getIdList();
+ 
+        public IdList getIdList(){
+        return idList;
     }
+
 }

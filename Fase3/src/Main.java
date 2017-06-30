@@ -84,7 +84,7 @@ public class Main {
             if ( program != null ) {
                PW pw = new PW();
                pw.set(printWriter);
-            //   program.genC( pw );
+               program.genC( pw );
                if ( printWriter.checkError() ) {
                   System.out.println("There was an error in the output");
                }

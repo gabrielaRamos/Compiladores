@@ -22,7 +22,8 @@ public class FuncDef {
         this.argList = argList;
     }
     
-    void genC(PW pw) {
+   public void genC(PW pw) {
+       
        pw.print(type.getcName() + " " + name.getName() + "(");
        if (argList != null){
            argList.genC(pw);
