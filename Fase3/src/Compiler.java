@@ -199,16 +199,19 @@ public class Compiler {
 
     //Declaration ::= Type IdList ’;’{ Type IdList’;’}
     //DUVIDA!!!!
-    public ArrayList<ArrayDeclaration> declaration() {
-
-        type();
-        idList();
+    public Declaration declaration() {
+        ArrayList<ArrayDeclaration> arrayDec = new ArrayList<ArrayDeclaration>();
+       
+        Type type;
+        type = type();
+        ArrayDeclaration dec = new ArrayDeclaration(type, idList());
+      arrayDec.add(dec);
         if (lexer.token == Symbol.SEMICOLON) {
             lexer.nextToken();
 
             while (lexer.token == Symbol.INT || lexer.token == Symbol.BOOLEAN || lexer.token == Symbol.CHAR || lexer.token == Symbol.FLOAT || lexer.token == Symbol.STRING || lexer.token == Symbol.VOID) {
                 type();
-                idList();
+                idList.add(idList());
 
                 if (lexer.token == Symbol.SEMICOLON) {
                     lexer.nextToken();
@@ -336,7 +339,7 @@ public class Compiler {
     }
 
 //IdList ::= NameArray {’,’ NameArray}
-    public ArrayList<NameArray> idList() {
+    public IdList idList() {
 
         ArrayList<NameArray> nameArray = new ArrayList<NameArray>();
 
@@ -346,7 +349,7 @@ public class Compiler {
             nameArray.add(nameArray());
         }
 
-        return nameArray;
+        return new IdList(nameArray);
     }
 
     //Stmt ::= SimpleStmt | CompoundStmt
