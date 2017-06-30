@@ -292,9 +292,9 @@ public class Compiler {
         } else if (lexer.token == Symbol.STRING) {
             result = Type.stringType;
         } else if (lexer.token == Symbol.VOID) {
-            result = Type.vectorType;
-        } else if (lexer.token == Symbol.VECTOR) {
             result = Type.voidType;
+        } else if (lexer.token == Symbol.VECTOR) {
+            result = Type.vectorType;
         } else {
             error.signal("Type expected");
             result = null;
@@ -556,7 +556,7 @@ public class Compiler {
     public Factor factor() {
         String sinal = null;
         AtomExpr atom = null;
-        ArrayList<Factor> factor = null;
+        ArrayList<Factor> factor = new ArrayList<Factor>();
         Type type = null;
 
         if (lexer.token == Symbol.PLUS) {
@@ -589,7 +589,7 @@ public class Compiler {
         Details details = null;
 
         atom = atom();
-
+       
         if (lexer.token == Symbol.LEFTSQBRACKET || lexer.token == Symbol.LEFTPAR) {
             details = details();
         }
@@ -602,20 +602,42 @@ public class Compiler {
     public Atom atom() {
 
         if (lexer.token == Symbol.IDENT) {
-            name();
+           Name name;
+           name = name(); 
+           Variable var;
+           var = (Variable) symbolTable.getInLocal(name.getName());
+            if(var!= null){
+                return new Atom(name.getName(), var.getType());
+            }
+            else{
+                error.show("Variable not statement");
+                return null;
+            }              
         } else if (lexer.token == Symbol.NUMBER) {
-            numberExpr();
+            NumberExpr number;
+            number = numberExpr();
+             if (number.getType() == Type.integerType) {
+                int num = number.getNumInt();
+                String numInt = num + "";
+                return new Atom(numInt, Type.integerType);
+            } else {
+                //ERRO FLOAT NO VETOR
+                float num = number.getNumFloat();
+                String numFloat = num + "";
+                return new Atom(numFloat, Type.floatType);
+            }
         } else if (lexer.token == Symbol.STRING || lexer.token == Symbol.CHARACTER) {
-            string();
+            return new Atom(string(), Type.stringType);
         } else if (lexer.token == Symbol.TRUE) {
             lexer.nextToken();
+            return new Atom("true", Type.booleanType);
         } else if (lexer.token == Symbol.FALSE) {
             lexer.nextToken();
+            return new Atom("true", Type.booleanType);
         } else {
             error.signal("NUMBER or STRING or BOOLEAN expected.");
+            return null;
         }
-
-        return null;
     }
 
     //Details ::= ‘[’(Number | Name)‘]’ | ’(’ [OrList] ’)’

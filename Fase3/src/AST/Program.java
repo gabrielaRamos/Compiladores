@@ -19,17 +19,12 @@ public class Program {
         pw.out.println("#include <string.h>");
         pw.out.println("#include <math.h>");
 
-        pw.out.println();
-        pw.println("int main() {");
-
-        pw.add();
         if (funcDef != null) {
             for(FuncDef f : funcDef){
                f.genC(pw);
             }
         }
-        pw.out.println("");
-        pw.println("return 0;");
+     
         pw.sub();
         pw.out.println("}");
     }

@@ -24,7 +24,7 @@ public class FuncDef {
     }
     
    public void genC(PW pw) {
-      
+      System.out.println(type + "\n\n\n\n\n\n");
        pw.print(type.getcName() + " " + name.getName() + "(");
        if (argList != null){
            argList.genC(pw);
