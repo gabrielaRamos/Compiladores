@@ -30,5 +30,8 @@ public class Variable {
     public void setName(NameArray name) {
         this.name = name;
     }
-
+    
+    public NameArray getObjNameArray() {
+        return this.name;
+    }
 }

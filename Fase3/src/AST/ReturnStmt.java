@@ -19,10 +19,12 @@ public class ReturnStmt extends SimpleStmt{
     public void genC(PW pw){
         
         pw.print("return ");
+        
         if (orT != null){
             orT.genC(pw);
         }
         pw.print(";");
+        pw.println("");
     }
 }
 

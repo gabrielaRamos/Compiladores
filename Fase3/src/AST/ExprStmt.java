@@ -7,12 +7,12 @@ public class ExprStmt extends SimpleStmt {
 
     private Variable variable;
     private OrTest orT = null;
-    private ExprList expr = null;
+    private OrList orList = null;
 
-    public ExprStmt(Variable variable, OrTest orT, ExprList expr) {
+    public ExprStmt(Variable variable, OrTest orT, OrList orList) {
         this.variable = variable;
         this.orT = orT;
-        this.expr = expr;
+        this.orList = orList;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ExprStmt extends SimpleStmt {
                 orT.genC(pw);
             }
             else {
-                expr.genC(pw);
+                orList.genC(pw);
             }
              pw.out.print(";");
              pw.println("");

@@ -35,4 +35,12 @@ public class NameArray {
             return name.getName();
         }
     }
+    
+    public Name getName() {
+        return name;
+    }
+
+    public NumberExpr getNumber() {
+        return number;
+    }
 }
