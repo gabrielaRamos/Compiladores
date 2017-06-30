@@ -321,51 +321,48 @@ public class Compiler {
     public Statement stmt() {
 
         Statement stmt = null;
-
+        
         if (lexer.token == Symbol.IDENT || lexer.token == Symbol.PRINT || lexer.token == Symbol.BREAK || lexer.token == Symbol.FUNCTION || lexer.token == Symbol.RETURN) {
-            stmt = simpleStmt();
+            return simpleStmt();
 
         } else if (lexer.token == Symbol.IF || lexer.token == Symbol.ELSE || lexer.token == Symbol.WHILE || lexer.token == Symbol.FOR) {
 
-            stmt = compoundStmt();
+            return compoundStmt();
 
         } else {
             error.signal("STATEMENT expected");
               return null;
         }
 
-        return stmt;
     }
 
     //SimpleStmt ::= ExprStmt | PrintStmt | BreakStmt | ReturnStmt | FuncStmt
-    public SimpleStmt simpleStmt() {
+    public Statement simpleStmt() {
 
         SimpleStmt simpleStmt = null;
 
         if (lexer.token == Symbol.IDENT) {
-            simpleStmt = exprStmt();
+            return exprStmt();
 
         } else if (lexer.token == Symbol.PRINT) {
 
-            simpleStmt = printStmt();
+            return printStmt();
 
         } else if (lexer.token == Symbol.BREAK) {
             if (flagLoop == false) {
                 error.signal("Statement 'break' just can be used inside loops.");
             }
-            simpleStmt = breakStmt();
+            return breakStmt();
 
         } else if (lexer.token == Symbol.RETURN) {
-            simpleStmt = returnStmt();
+            return returnStmt();
 
         } else if (lexer.token == Symbol.FUNCTION) {
-            simpleStmt = funcStmt();
+            return funcStmt();
         } else {
             error.signal("SIMPLE STATEMENT expected");
-            //return null;
-        }
-
-        return simpleStmt;
+            return null;
+        }    
     }
 
     //ExprStmt ::= Name [ ‘[’Atom‘]’ ] ’=’ (OrTest | ’[’OrList’]’) ’;’
@@ -422,7 +419,7 @@ public class Compiler {
         } else {
             error.signal("= expected.");
         }
-
+      
         return null;
     }
 
