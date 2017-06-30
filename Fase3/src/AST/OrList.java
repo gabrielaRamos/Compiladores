@@ -8,14 +8,14 @@ package AST;
 import java.util.ArrayList;
 
 public class OrList {
-    private ArrayList<orTest> orT;
+    private ArrayList<OrTest> orT;
 
-    public OrList(ArrayList<orTest> orT) {
+    public OrList(ArrayList<OrTest> orT) {
         this.orT = orT;
     }
     
     public void genC(PW pw){
-        for(orTest orT : orT){
+        for(OrTest orT : orT){
             orT.genC(pw);
             pw.print(",");
         }

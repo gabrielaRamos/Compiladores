@@ -10,9 +10,9 @@ package AST;
  * ReturnStmt ::= ’return’ [OrTest]’;’
  */
 public class ReturnStmt extends SimpleStmt{
-    private orTest orT;
+    private OrTest orT;
     
-    public ReturnStmt(orTest orT){
+    public ReturnStmt(OrTest orT){
         this.orT =  orT;
     }
     

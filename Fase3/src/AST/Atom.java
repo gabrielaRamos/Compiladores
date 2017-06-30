@@ -32,9 +32,9 @@ public class Atom extends Expr {
                 for (int i = 0; i < Declaration.var.size(); i++) {
                     for(int j= 0; j < Declaration.var.get(i).getArrayDec().size(); j++){
                         //percorrer 
-                        if(Declaration.var.get(i).getArrayDec().get(j)){
+                        //if(Declaration.var.get(i).getArrayDec().get(j)){
                             
-                        }
+                       // }
                     }
                 }
             }

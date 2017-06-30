@@ -8,17 +8,17 @@ import java.util.ArrayList;
 public class PrintStmt extends SimpleStmt {
 
     //PrintStmt ::= ’print’ OrTest {’,’ OrTest}’;’
-    private ArrayList<orTest> orTest;
+    private ArrayList<OrTest> orTest;
     public static int print = 0;
     
-    public PrintStmt(ArrayList<orTest> orTest) {
+    public PrintStmt(ArrayList<OrTest> orTest) {
         this.orTest = orTest;
     }
     
     @Override
     public void genC(PW pw) {
         this.print = 0;
-        for(orTest i : orTest){
+        for(OrTest i : orTest){
             
             pw.print("printf(");
             this.print = 1;

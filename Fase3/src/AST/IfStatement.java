@@ -10,9 +10,9 @@ public class IfStatement extends CompoundStmt {
     //IfStmt ::= ’if’ OrTest ’{’ {Stmt} ’}’ [’else’ ’{’ {Stmt} ’}’]
     private ArrayList<Statement> stmt1;
     private ArrayList<Statement> stmt2;
-    private orTest orT;
+    private OrTest orT;
 
-    public IfStatement(ArrayList<Statement> stmt1, orTest orT, ArrayList<Statement> stmt2) {
+    public IfStatement(ArrayList<Statement> stmt1, OrTest orT, ArrayList<Statement> stmt2) {
         this.stmt1 = stmt1;
         this.orT = orT;
         this.stmt2 = stmt2;

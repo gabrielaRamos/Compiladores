@@ -6,12 +6,12 @@ package AST;
 import java.util.ArrayList;
 
 
-public class orTest {
+public class OrTest {
 
     //OrTest ::= AndTest {’or’ AndTest}
     private ArrayList<AndTest> andT;
 
-    public orTest(ArrayList<AndTest> andT) {
+    public OrTest(ArrayList<AndTest> andT) {
         this.andT = andT;
     }
 

@@ -9,11 +9,11 @@ public class ForStatement extends CompoundStmt {
 
     //ForStmt ::= ’for’ Name ’inrange’ ’(’ Number ’,’ Number ’)’ ’{’ {Stmt} ’}’
     private Name name;
-    private numberExpr number1;
-    private numberExpr number2;
+    private NumberExpr number1;
+    private NumberExpr number2;
     private ArrayList<Statement> stmt;
 
-    public ForStatement(Name name, numberExpr number1, numberExpr number2, ArrayList<Statement> stmt) {
+    public ForStatement(Name name, NumberExpr number1, NumberExpr number2, ArrayList<Statement> stmt) {
         this.name = name;
         this.number1 = number1;
         this.number2 = number2;

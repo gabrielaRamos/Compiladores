@@ -5,7 +5,7 @@ package AST;
 
 import java.util.ArrayList;
 
-public class numberExpr {
+public class NumberExpr {
 
     //Number ::= [Signal] Digit{Digit} [’.’ Digit{Digit}]
     private String signal = null;
@@ -14,7 +14,7 @@ public class numberExpr {
     private String number;
     private int flag;
 
-    public numberExpr(String sinal, int valueInt) {
+    public NumberExpr(String sinal, int valueInt) {
         this.signal = sinal;
         this.valueInt = valueInt;
         this.flag = 0;
@@ -25,7 +25,7 @@ public class numberExpr {
         }
     }
 
-    public numberExpr(String signal, float valueFloat, int flag) {
+    public NumberExpr(String signal, float valueFloat, int flag) {
         this.signal = signal;
         this.valueFloat = valueFloat;
         this.flag = flag;

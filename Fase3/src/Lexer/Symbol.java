@@ -38,6 +38,7 @@ public enum Symbol {
     BOOLEAN("boolean"),
     CHAR("char"),
     VOID("void"),
+    VECTOR("vector"),
     CHARACTER("character"),
     TRUE("True"),
     FALSE("False"),

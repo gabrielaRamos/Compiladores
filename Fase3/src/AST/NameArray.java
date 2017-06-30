@@ -11,9 +11,9 @@ package AST;
  */
 public class NameArray {
    private Name name;
-   private numberExpr number;
+   private NumberExpr number;
 
-    public NameArray(Name name, numberExpr number) {
+    public NameArray(Name name, NumberExpr number) {
         this.name = name;
         this.number = number;
     }

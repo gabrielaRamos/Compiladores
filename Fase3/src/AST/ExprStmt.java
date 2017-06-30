@@ -6,10 +6,10 @@ package AST;
 public class ExprStmt extends SimpleStmt {
 
     private Variable variable;
-    private orTest orT = null;
+    private OrTest orT = null;
     private ExprList expr = null;
 
-    public ExprStmt(Variable variable, orTest orT, ExprList expr) {
+    public ExprStmt(Variable variable, OrTest orT, ExprList expr) {
         this.variable = variable;
         this.orT = orT;
         this.expr = expr;

@@ -9,8 +9,8 @@ package AST;
  *
  * ‘[’(Number | Name)‘]’ | ’(’ [OrList] ’)’
  */
-class Details {
-    private numberExpr number;
+public class Details {
+    private NumberExpr number;
     private Name name;
     private OrList orList;
 
@@ -18,7 +18,7 @@ class Details {
         this.orList = orList;
     }
     
-    public Details(numberExpr number, Name name) {
+    public Details(NumberExpr number, Name name) {
         this.number = number;
         this.name = name;
     }

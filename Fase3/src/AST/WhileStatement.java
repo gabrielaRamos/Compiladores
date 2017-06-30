@@ -5,12 +5,12 @@ package AST;
 
 import java.util.ArrayList;
 
-public class whileStatement extends CompoundStmt{
+public class WhileStatement extends CompoundStmt{
     
-    private orTest orT;
+    private OrTest orT;
     private ArrayList<Statement> stmt;
 
-    public whileStatement(orTest orT, ArrayList<Statement> stmt) {
+    public WhileStatement(OrTest orT, ArrayList<Statement> stmt) {
         this.orT = orT;
         this.stmt = stmt;
     }
