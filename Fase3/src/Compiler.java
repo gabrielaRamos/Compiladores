@@ -716,7 +716,7 @@ public class Compiler {
                 error.signal("Number expected");
             }
             lexer.nextToken();
-            return new numberExpr(sinal, valueFloat, flag);
+            return new NumberExpr(sinal, valueFloat, flag);
         } else {
             valueInt = lexer.getNumberValueInt();
             if (Lexer.MaxValueInteger - 1 == valueInt) {
@@ -724,7 +724,7 @@ public class Compiler {
             }
             lexer.nextToken();
 
-            return new numberExpr(sinal, valueInt);
+            return new NumberExpr(sinal, valueInt);
         }
     }
 

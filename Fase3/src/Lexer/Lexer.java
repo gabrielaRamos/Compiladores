@@ -3,10 +3,6 @@ package Lexer;
 import java.util.*;
 
 //import AuxComp.*;
-
-
-
-
 public class Lexer {
 
     public Lexer(char[] input, CompilerError error) {
@@ -88,13 +84,13 @@ public class Lexer {
         keywordsTable.put("char", Symbol.CHAR);
         keywordsTable.put("void", Symbol.VOID);
         keywordsTable.put("True", Symbol.TRUE);
-        keywordsTable.put("False", Symbol.FALSE);        
+        keywordsTable.put("False", Symbol.FALSE);
         keywordsTable.put("and", Symbol.AND);
         keywordsTable.put("or", Symbol.OR);
-        keywordsTable.put("not", Symbol.NOT);      
+        keywordsTable.put("not", Symbol.NOT);
         keywordsTable.put("for", Symbol.FOR);
-        keywordsTable.put("while", Symbol.WHILE);      
-        keywordsTable.put("return", Symbol.RETURN);        
+        keywordsTable.put("while", Symbol.WHILE);
+        keywordsTable.put("return", Symbol.RETURN);
         keywordsTable.put("break", Symbol.BREAK);
         keywordsTable.put("def", Symbol.DEF);
         keywordsTable.put("float", Symbol.FLOAT);
@@ -106,7 +102,12 @@ public class Lexer {
     }
 
     public void nextToken() {
+        stringValue = null;
+        numberValueInt = MaxValueInteger - 1;
+        numberValueFloat = MaxValueInteger - 1;
+        charValue = '\0';
         char ch;
+        int flag = 0;
         while ((ch = input[tokenPos]) == ' ' || ch == '\r' || ch == '\t' || ch == '\n') {
 
             // count the number of lines
@@ -143,18 +144,39 @@ public class Lexer {
             } else if (Character.isDigit(ch)) {
 // get a number
                 StringBuffer number = new StringBuffer();
-                while (Character.isDigit(input[tokenPos])) {
+                //para caso o numero seja float
+                while ((Character.isDigit(input[tokenPos]) || input[tokenPos] == '.') && flag <= 1) {
+                    if (input[tokenPos] == '.') {
+                        flag++;
+                    }
                     number.append(input[tokenPos]);
+
                     tokenPos++;
+
                 }
-                token = Symbol.NUMBER;
-                try {
-                    numberValue = Integer.valueOf(number.toString()).intValue();
-                } catch (NumberFormatException e) {
-                    error.signal("Number out of limits");
+                if (flag > 1) {
+                    error.signal("Number followed by two points");
                 }
-                if (numberValue >= MaxValueInteger) {
-                    error.signal("Number out of limits");
+                if (Character.isLetter(input[tokenPos])) {
+                    error.signal("Number followed by a letter");
+                } else {
+                    token = Symbol.NUMBER;
+                    this.flaFloat = flag;
+                    try {
+                        //numero é um float
+                        if (flag == 1) {
+
+                            numberValueFloat = Float.valueOf(number.toString());
+                        } else {
+                            numberValueInt = Integer.valueOf(number.toString()).intValue();
+                        }
+                    } catch (NumberFormatException e) {
+                        error.signal("Number out of limits");
+                    }
+
+                    if (numberValueInt >= MaxValueInteger) {
+                        error.signal("Number out of limits");
+                    }
                 }
             } else {
                 tokenPos++;
@@ -221,30 +243,30 @@ public class Lexer {
                         token = Symbol.COLON;
                         break;
                     case '\'':
-                         if (input[tokenPos + 1] == '\'') {
-                                token = Symbol.CHARACTER;
-                                charValue = input[tokenPos];
+                        if (input[tokenPos + 1] == '\'') {
+                            token = Symbol.CHARACTER;
+                            charValue = input[tokenPos];
+                            tokenPos++;
+                            if (input[tokenPos] != '\'') {
+                                error.signal("Illegal literal character" + input[tokenPos - 1]);
+                            }
+                        } else {
+
+                            token = Symbol.STRING;
+                            StringBuffer str = new StringBuffer();
+                            while (input[tokenPos] != '\'' && input[tokenPos] != '\0') {
+                                str.append(input[tokenPos]);
+
                                 tokenPos++;
-                                if (input[tokenPos] != '\'') {
-                                    error.signal("Illegal literal character" + input[tokenPos - 1]);
-                                }
-                            } else {
-
-                                token = Symbol.STRING;
-                                StringBuffer str = new StringBuffer();
-                                while (input[tokenPos] != '\'' && input[tokenPos]!='\0') {
-                                    str.append(input[tokenPos]);
-
-                                    tokenPos++;
-                                }
-                                stringValue = str.toString();
-                                if (input[tokenPos] != '\'') {
-                                    error.signal("Illegal literal character" + input[tokenPos - 1]);
-                                }
-
+                            }
+                            stringValue = str.toString();
+                            if (input[tokenPos] != '\'') {
+                                error.signal("Illegal literal character" + input[tokenPos - 1]);
                             }
 
-                            tokenPos++;
+                        }
+
+                        tokenPos++;
                         break;
 // the next four symbols are not used by the language
 // but are returned to help the error treatment
@@ -335,8 +357,16 @@ public class Lexer {
         return stringValue;
     }
 
-    public int getNumberValue() {
-        return numberValue;
+    public int isIntOrFloat() {
+        return this.flaFloat;
+    }
+
+    public int getNumberValueInt() {
+        return numberValueInt;
+    }
+
+    public float getNumberValueFloat() {
+        return numberValueFloat;
     }
 
     public char getCharValue() {
@@ -345,7 +375,8 @@ public class Lexer {
 // current token
     public Symbol token;
     private String stringValue;
-    private int numberValue;
+    private int numberValueInt;
+    private float numberValueFloat;
     private char charValue;
     private int tokenPos;
 // input[lastTokenPos] is the last character of the last token found
@@ -357,6 +388,7 @@ public class Lexer {
     private char[] input;
 // number of current line. Starts with 1
     private int lineNumber;
+    private int flaFloat;
     private CompilerError error;
-    private static final int MaxValueInteger = 32768;
+    public static final int MaxValueInteger = 32768;
 }
