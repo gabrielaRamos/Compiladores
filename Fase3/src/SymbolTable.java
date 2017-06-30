@@ -2,7 +2,6 @@
 import java.util.*;
 
 public class SymbolTable {
-/*
     public SymbolTable() {
         globalTable = new Hashtable();
         localTable = new Hashtable();
@@ -40,6 +39,6 @@ public class SymbolTable {
 // remove all local identifiers from the table
         localTable.clear();
         }
-private Hashtable globalTable, localTable;*/
+private Hashtable globalTable, localTable;
 }
 
