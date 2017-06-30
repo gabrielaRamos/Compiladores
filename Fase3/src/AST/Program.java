@@ -24,7 +24,6 @@ public class Program {
 
         pw.add();
         if (funcDef != null) {
-         
             for(FuncDef f : funcDef){
                f.genC(pw);
             }

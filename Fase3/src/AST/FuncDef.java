@@ -20,10 +20,11 @@ public class FuncDef {
         this.body = body;
         this.name = name;
         this.argList = argList;
+        
     }
     
    public void genC(PW pw) {
-       
+      
        pw.print(type.getcName() + " " + name.getName() + "(");
        if (argList != null){
            argList.genC(pw);

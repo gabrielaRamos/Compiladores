@@ -33,7 +33,7 @@ public class Compiler {
             name();
             if (lexer.token == Symbol.COLON) {
                 lexer.nextToken();
-                funcDef();
+                funcDef.add(funcDef());
                 while (lexer.token == Symbol.DEF) {
                     funcDef.add(funcDef());
                 }
@@ -86,7 +86,6 @@ public class Compiler {
                     if (lexer.token == Symbol.BOOLEAN || lexer.token == Symbol.INT || lexer.token == Symbol.CHAR || lexer.token == Symbol.FLOAT || lexer.token == Symbol.STRING) {
                         argList = argsList();
                     }
-
                     if (lexer.token == Symbol.RIGHTPAR) {
                         lexer.nextToken();
 
