@@ -59,9 +59,9 @@ public class Atom extends Expr {
             }
         } else {
 
-            if (this.atom.equals("True")) {
+            if (this.atom.equals("true")) {
                 pw.out.print("1");
-            } else if (this.atom.equals("False")) {
+            } else if (this.atom.equals("false")) {
                 pw.out.print("0");
 
             } else {

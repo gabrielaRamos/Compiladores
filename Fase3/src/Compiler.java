@@ -147,16 +147,18 @@ public class Compiler {
         if (symbolTable.getInLocal(name.getNameArray()) == null) {
 
             var = new Variable(type, name);
-            symbolTable.putInLocal(name.getNameArray(), var);
+           
+            symbolTable.putInLocal(name.getName(), var);
             varList.add(var);
 
             while (lexer.token == Symbol.COMMA) {
                 lexer.nextToken();
                 type = type();
                 name = nameArray();
-                if (symbolTable.getInLocal(name.getNameArray()) == null) {
+                 System.out.println("ARG  " + name.getNameArray());
+                if (symbolTable.getInLocal(name.getName()) == null) {
                     var = new Variable(type, name);
-                    symbolTable.putInLocal(name.getNameArray(), var);
+                    symbolTable.putInLocal(name.getName(), var);
                     varList.add(var);
                 } else {
                     error.signal("variable alredy declared");
@@ -211,8 +213,8 @@ public class Compiler {
     public Body body() {
         Declaration dec = null;
         ArrayList<Statement> stmt = new ArrayList<Statement>();
-
-        if (lexer.token == Symbol.INT || lexer.token == Symbol.FLOAT || lexer.token == Symbol.STRING || lexer.token == Symbol.BOOLEAN || lexer.token == Symbol.IDENT) {
+        
+        if (lexer.token == Symbol.INT || lexer.token == Symbol.FLOAT || lexer.token == Symbol.STRING || lexer.token == Symbol.BOOLEAN ) {
             dec = declaration();
         }
 
@@ -336,6 +338,7 @@ public class Compiler {
         Statement stmt = null;
 
         if (lexer.token == Symbol.IDENT || lexer.token == Symbol.PRINT || lexer.token == Symbol.BREAK || lexer.token == Symbol.FUNCTION || lexer.token == Symbol.RETURN) {
+           
             return simpleStmt();
 
         } else if (lexer.token == Symbol.IF || lexer.token == Symbol.ELSE || lexer.token == Symbol.WHILE || lexer.token == Symbol.FOR) {
@@ -353,8 +356,8 @@ public class Compiler {
     public Statement simpleStmt() {
 
         SimpleStmt simpleStmt = null;
-
-        if (lexer.token == Symbol.IDENT) {
+        
+        if (lexer.token == Symbol.IDENT && symbolTable.getInGlobal(lexer.getStringValue()) == null) {
             return exprStmt();
 
         } else if (lexer.token == Symbol.PRINT) {
@@ -370,7 +373,7 @@ public class Compiler {
         } else if (lexer.token == Symbol.RETURN) {
             return returnStmt();
 
-        } else if (lexer.token == Symbol.FUNCTION) {
+        } else if (lexer.token == Symbol.IDENT) {
             return funcStmt();
         } else {
             error.signal("SIMPLE STATEMENT expected");
@@ -674,7 +677,7 @@ public class Compiler {
             Name name;
             name = name();
             Variable var;
-
+            
             var = (Variable) symbolTable.getInLocal(name.getName());
             if (var != null) {
                 return new Atom(name.getName(), var.getType());
@@ -708,7 +711,7 @@ public class Compiler {
             return new Atom("true", Type.booleanType);
         } else if (lexer.token == Symbol.FALSE) {
             lexer.nextToken();
-            return new Atom("true", Type.booleanType);
+            return new Atom("false", Type.booleanType);
         } else {
             error.signal("NUMBER or STRING or BOOLEAN expected.");
             return null;
