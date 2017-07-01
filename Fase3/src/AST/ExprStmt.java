@@ -17,7 +17,7 @@ public class ExprStmt extends SimpleStmt {
 
     @Override
     public void genC(PW pw) {
-        
+       
         if(variable.getType() == Type.stringType && orT != null){
             pw.print("strcpy("+ variable.getName() + ",");
             //para usar strcpy necessariamente deve ser um orTest

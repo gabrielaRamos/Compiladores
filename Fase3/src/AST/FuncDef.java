@@ -37,4 +37,7 @@ public class FuncDef {
        pw.print("}");
     }
     
+   public Type getType(){
+       return type;
+   }
 }

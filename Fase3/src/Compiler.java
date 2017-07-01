@@ -38,11 +38,11 @@ public class Compiler {
                     funcDef.add(funcDef());
                 }
                 if (symbolTable.getInGlobal("main") == null) {
-                        error.show("Source code must have a procedure called main");
-                    }
+                    error.show("Source code must have a procedure called main");
+                }
                 if (lexer.token == Symbol.END) {
                     lexer.nextToken();
-                    
+
                 } else {
                     error.signal("end expected");
                 }
@@ -80,7 +80,7 @@ public class Compiler {
             lexer.nextToken();
             name = name();
             if (symbolTable.getInGlobal(name) == null) {
-                
+
                 if (lexer.token == Symbol.LEFTPAR) {
                     lexer.nextToken();
                     if (lexer.token == Symbol.BOOLEAN || lexer.token == Symbol.INT || lexer.token == Symbol.CHAR || lexer.token == Symbol.FLOAT || lexer.token == Symbol.STRING) {
@@ -99,35 +99,36 @@ public class Compiler {
                                 body = body();
                                 if (lexer.token == Symbol.CURLYRIGHTBRACE) {
                                     lexer.nextToken();
-                                    FuncDef func = new FuncDef(type,body,name,argList);
-                                    symbolTable.putInGlobal(name.getName(),func);
+                                    FuncDef func = new FuncDef(type, body, name, argList);
+                                    symbolTable.putInGlobal(name.getName(), func);
+
                                     return func;
                                 } else {
                                     error.signal("} expected");
-                                     return null;
+                                    return null;
                                 }
                             } else {
                                 error.signal("{ expected");
-                                 
+
                             }
                         } else {
                             error.signal(": expected");
-                            
+
                         }
                     } else {
                         error.signal(") expected");
-                        
+
                     }
                 } else {
                     error.signal("( expected");
-                     
+
                 }
             } else {
                 //DECLARAÇÃO DE VARIAVEL
                 error.show("function alredy statement");
-                
+
             }
-        } 
+        }
         return null;
     }
 
@@ -141,22 +142,32 @@ public class Compiler {
 
         type = type();
         name = nameArray();
-
-        var = new Variable(type, name);
-
-        varList.add(var);
-
-        while (lexer.token == Symbol.COMMA) {
-            lexer.nextToken();
-            type = type();
-            name = nameArray();
-
+        if (symbolTable.getInLocal(name.getNameArray()) == null) {
+            
             var = new Variable(type, name);
+            symbolTable.putInLocal(name.getNameArray(), var);
             varList.add(var);
 
-        }
+            while (lexer.token == Symbol.COMMA) {
+                lexer.nextToken();
+                type = type();
+                name = nameArray();
+                if(symbolTable.getInLocal(name.getNameArray()) == null){
+                    var = new Variable(type, name);
+                    symbolTable.putInLocal(name.getNameArray(), var);
+                    varList.add(var);
+                }
+                else{
+                    error.signal("variable alredy declared");
+                }
+                
 
-        return new ArgList(varList);
+            }
+            return new ArgList(varList);
+        } else {
+            error.signal("variable alredy declared");
+            return null;
+        }
     }
 
     //NameArray ::= Name[‘[’Number‘]’]
@@ -208,6 +219,7 @@ public class Compiler {
                 || lexer.token == Symbol.IF || lexer.token == Symbol.WHILE || lexer.token == Symbol.FOR || lexer.token == Symbol.FUNCTION || lexer.token == Symbol.RETURN) {
             stmt.add(stmt());
         }
+        symbolTable.removeLocalIdent();
         return new Body(dec, stmt);
     }
 
@@ -232,6 +244,7 @@ public class Compiler {
                 if (symbolTable.getInLocal(var) == null) {
 
                     symbolTable.putInLocal(var.getName(), var);
+
                 } else {
                     error.signal("Variable was already declared");
                 }
@@ -272,7 +285,6 @@ public class Compiler {
             error.signal("; expected.");
         }
 
-        symbolTable.removeLocalIdent();
         return new Declaration(arrayDec);
     }
 
@@ -321,7 +333,7 @@ public class Compiler {
     public Statement stmt() {
 
         Statement stmt = null;
-        
+
         if (lexer.token == Symbol.IDENT || lexer.token == Symbol.PRINT || lexer.token == Symbol.BREAK || lexer.token == Symbol.FUNCTION || lexer.token == Symbol.RETURN) {
             return simpleStmt();
 
@@ -331,7 +343,7 @@ public class Compiler {
 
         } else {
             error.signal("STATEMENT expected");
-              return null;
+            return null;
         }
 
     }
@@ -362,7 +374,7 @@ public class Compiler {
         } else {
             error.signal("SIMPLE STATEMENT expected");
             return null;
-        }    
+        }
     }
 
     //ExprStmt ::= Name [ ‘[’Atom‘]’ ] ’=’ (OrTest | ’[’OrList’]’) ’;’
@@ -379,9 +391,11 @@ public class Compiler {
         if (name.getName() == null) {
             error.signal("Name expected");
         }
-        if (symbolTable.get(name.getName()) == null) {
-            error.signal("Variable not declared");
+        
+        if (symbolTable.getInLocal(name.getName()) == null) {
+            error.signal("Variable "+ name.getName()+" not declared");
         } else {
+            var = (Variable) symbolTable.getInLocal(name.getName());
             if (lexer.token == Symbol.LEFTSQBRACKET) {
                 lexer.nextToken();
                 atom = atom();
@@ -392,7 +406,6 @@ public class Compiler {
                     error.signal("] expected.");
                 }
 
-                var = (Variable) symbolTable.getInLocal(name.getName());
             }
             if (lexer.token == Symbol.ASSIGN) {
                 lexer.nextToken();
@@ -411,10 +424,14 @@ public class Compiler {
                         }
                     } //x = variavel                
                     else if (lexer.token == Symbol.IDENT) {
-                        if ((Variable) symbolTable.getInLocal(lexer.getStringValue()) == null) {
+                        if (symbolTable.get(lexer.getStringValue()) == null) {
                             error.signal("The variable " + lexer.getStringValue() + " was not declared.");
                         } //VERIFICAR!!!
-                        else if (((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType() == ((Variable) symbolTable.getInLocal(name.getName())).getType()) {
+                        
+                        
+                        
+                        if ((((Variable) symbolTable.getInLocal(name.getName())).getType() == (((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType())) ||
+                                (((Variable) symbolTable.getInLocal(name.getName())).getType() == (((FuncDef) symbolTable.getInGlobal(lexer.getStringValue())).getType()))) {
 
                             if (atom != null && ((Variable) symbolTable.getInLocal(lexer.getStringValue())).getObjNameArray().getNumber() != null) {
                                 error.signal("Invalid assignment.");
@@ -451,6 +468,7 @@ public class Compiler {
                 if (lexer.token == Symbol.SEMICOLON) {
 
                     lexer.nextToken();
+                    System.out.println("VARRR " + var);
                     return new ExprStmt(var, orT, orList);
 
                 } else {
@@ -628,9 +646,11 @@ public class Compiler {
         Details details = null;
 
         atom = atom();
-       
+
         if (lexer.token == Symbol.LEFTSQBRACKET || lexer.token == Symbol.LEFTPAR) {
+
             details = details();
+
         }
 
         return new AtomExpr(atom, details);
@@ -641,21 +661,27 @@ public class Compiler {
     public Atom atom() {
 
         if (lexer.token == Symbol.IDENT) {
-           Name name;
-           name = name(); 
-           Variable var;
-           var = (Variable) symbolTable.getInLocal(name.getName());
-            if(var!= null){
+            Name name;
+            name = name();
+            Variable var;
+
+            var = (Variable) symbolTable.getInLocal(name.getName());
+            if (var != null) {
                 return new Atom(name.getName(), var.getType());
+            } else {
+                FuncDef func = (FuncDef) symbolTable.getInGlobal(name.getName());;
+                if (func != null) {
+
+                    return new Atom(name.getName(), func.getType());
+                } else {
+                    error.show("Variable not statement");
+                    return null;
+                }
             }
-            else{
-                error.show("Variable not statement");
-                return null;
-            }              
         } else if (lexer.token == Symbol.NUMBER) {
             NumberExpr number;
             number = numberExpr();
-             if (number.getType() == Type.integerType) {
+            if (number.getType() == Type.integerType) {
                 int num = number.getNumInt();
                 String numInt = num + "";
                 return new Atom(numInt, Type.integerType);
@@ -666,7 +692,7 @@ public class Compiler {
                 return new Atom(numFloat, Type.floatType);
             }
         } else if (lexer.token == Symbol.STRING || lexer.token == Symbol.CHARACTER) {
-            return new Atom(string(), Type.stringType);
+            return new Atom(string(), 1, Type.stringType);
         } else if (lexer.token == Symbol.TRUE) {
             lexer.nextToken();
             return new Atom("true", Type.booleanType);
@@ -712,6 +738,7 @@ public class Compiler {
                     || lexer.token == Symbol.STRING || lexer.token == Symbol.NUMBER || lexer.token == Symbol.TRUE || lexer.token == Symbol.FALSE) {
 
                 orList = orList();
+                return new Details("(", orList);
             }
 
             if (lexer.token == Symbol.RIGHTPAR) {
@@ -720,7 +747,7 @@ public class Compiler {
                 error.signal(") expected.");
             }
 
-            return new Details(orList);
+            return new Details("(");
         }
 
         return null;

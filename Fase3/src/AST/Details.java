@@ -13,9 +13,15 @@ public class Details {
     private NumberExpr number;
     private Name name;
     private OrList orList;
-
-    public Details(OrList orList) {
+    private String parenteses = null;
+  
+    public Details(String parenteses){
+        this.parenteses = parenteses;
+    }
+    
+    public Details(String parenteses, OrList orList) {
         this.orList = orList;
+         this.parenteses = parenteses;
     }
     
     public Details(NumberExpr number, Name name) {
@@ -24,12 +30,16 @@ public class Details {
     }
 
     public void genC(PW pw) {
+        if(this.parenteses != null){
         if (orList != null){
             pw.print("(");
             orList.genC(pw);
             pw.print(")");
         }
         else{
+            pw.print("( )");
+        }
+        }else{
             pw.print("[");
             if(number != null){
                 number.genC(pw);
