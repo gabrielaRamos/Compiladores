@@ -462,7 +462,7 @@ public class Compiler {
                         error.signal("The variable " + name.getName() + " can only receive values 'true' or 'false'.");
                     }
                     orT = orTest();
-
+                    System.out.print(lexer.token);
                 } else if (lexer.token == Symbol.LEFTSQBRACKET) {
                     lexer.nextToken();
                     orList = orList();
@@ -660,7 +660,7 @@ public class Compiler {
         if (lexer.token == Symbol.LEFTSQBRACKET || lexer.token == Symbol.LEFTPAR) {
 
             details = details();
-
+            
         }
 
         return new AtomExpr(atom, details);
@@ -748,16 +748,17 @@ public class Compiler {
                     || lexer.token == Symbol.STRING || lexer.token == Symbol.NUMBER || lexer.token == Symbol.TRUE || lexer.token == Symbol.FALSE) {
 
                 orList = orList();
-                return new Details("(", orList);
+                
             }
 
             if (lexer.token == Symbol.RIGHTPAR) {
                 lexer.nextToken();
+                
             } else {
                 error.signal(") expected.");
             }
 
-            return new Details("(");
+            return new Details("(", orList);
         }
 
         return null;

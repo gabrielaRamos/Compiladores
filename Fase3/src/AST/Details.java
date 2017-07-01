@@ -15,9 +15,7 @@ public class Details {
     private OrList orList;
     private String parenteses = null;
   
-    public Details(String parenteses){
-        this.parenteses = parenteses;
-    }
+   
     
     public Details(String parenteses, OrList orList) {
         this.orList = orList;
