@@ -24,7 +24,7 @@ public class Variable {
     }
 
     public String getName() {
-        return this.name.getNameArray();
+        return this.name.getName();
     }
 
     public void setName(NameArray name) {

@@ -22,6 +22,11 @@ public class FuncDef {
         this.argList = argList;
         
     }
+
+    public FuncDef(Type type, Name name) {
+       this.type = type;
+        this.name = name;
+    }
     
    public void genC(PW pw) {
       

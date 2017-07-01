@@ -93,16 +93,18 @@ public class Compiler {
                             lexer.nextToken();
 
                             type = type();
-
+                            FuncDef func = new FuncDef(type, name);
+                            System.out.println("Name fUNCTION" + name.getName());
+                            symbolTable.putInGlobal(name.getName(), func);
+                            
                             if (lexer.token == Symbol.CURLYLEFTBRACE) {
                                 lexer.nextToken();
+                                
                                 body = body();
                                 if (lexer.token == Symbol.CURLYRIGHTBRACE) {
                                     lexer.nextToken();
-                                    FuncDef func = new FuncDef(type, body, name, argList);
-                                    symbolTable.putInGlobal(name.getName(), func);
 
-                                    return func;
+                                    return new FuncDef(type, body, name, argList);
                                 } else {
                                     error.signal("} expected");
                                     return null;
@@ -143,7 +145,7 @@ public class Compiler {
         type = type();
         name = nameArray();
         if (symbolTable.getInLocal(name.getNameArray()) == null) {
-            
+
             var = new Variable(type, name);
             symbolTable.putInLocal(name.getNameArray(), var);
             varList.add(var);
@@ -152,15 +154,13 @@ public class Compiler {
                 lexer.nextToken();
                 type = type();
                 name = nameArray();
-                if(symbolTable.getInLocal(name.getNameArray()) == null){
+                if (symbolTable.getInLocal(name.getNameArray()) == null) {
                     var = new Variable(type, name);
                     symbolTable.putInLocal(name.getNameArray(), var);
                     varList.add(var);
-                }
-                else{
+                } else {
                     error.signal("variable alredy declared");
                 }
-                
 
             }
             return new ArgList(varList);
@@ -176,6 +176,7 @@ public class Compiler {
         NumberExpr number = null;
 
         name = name();
+
         if (lexer.token == Symbol.LEFTSQBRACKET) {
             lexer.nextToken();
             number = numberExpr();
@@ -244,7 +245,7 @@ public class Compiler {
                 if (symbolTable.getInLocal(var) == null) {
 
                     symbolTable.putInLocal(var.getName(), var);
-
+                    System.out.print("\n\n\nNAME " + var.getName());
                 } else {
                     error.signal("Variable was already declared");
                 }
@@ -264,10 +265,10 @@ public class Compiler {
                 for (int i = 0; i < arrayDec.size(); i++) {
                     for (int j = 0; j < arrayDec.get(i).getIdList().getNameArray().size(); j++) {
                         var = new Variable(arrayDec.get(i).getType(), arrayDec.get(i).getIdList().getNameArray().get(j));
-
                         if (symbolTable.getInLocal(var) == null) {
 
                             symbolTable.putInLocal(var.getName(), var);
+                            System.out.print("\n\n\nNAME " + var.getObjNameArray().getNameArray());
                         } else {
                             error.signal("Variable was already declared");
                         }
@@ -391,9 +392,9 @@ public class Compiler {
         if (name.getName() == null) {
             error.signal("Name expected");
         }
-        
+
         if (symbolTable.getInLocal(name.getName()) == null) {
-            error.signal("Variable "+ name.getName()+" not declared");
+            error.signal("Variable " + name.getName() + " not declared");
         } else {
             var = (Variable) symbolTable.getInLocal(name.getName());
             if (lexer.token == Symbol.LEFTSQBRACKET) {
@@ -427,16 +428,25 @@ public class Compiler {
                         if (symbolTable.get(lexer.getStringValue()) == null) {
                             error.signal("The variable " + lexer.getStringValue() + " was not declared.");
                         } //VERIFICAR!!!
-                        
-                        
-                        
-                        if ((((Variable) symbolTable.getInLocal(name.getName())).getType() == (((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType())) ||
-                                (((Variable) symbolTable.getInLocal(name.getName())).getType() == (((FuncDef) symbolTable.getInGlobal(lexer.getStringValue())).getType()))) {
 
+                        if(symbolTable.getInLocal(lexer.getStringValue()) != null){
+                        if ((((Variable) symbolTable.getInLocal(name.getName())).getType() == (((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType()))){
+                               
                             if (atom != null && ((Variable) symbolTable.getInLocal(lexer.getStringValue())).getObjNameArray().getNumber() != null) {
                                 error.signal("Invalid assignment.");
                             }
-                        } else if (((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType() != ((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType()) {
+                        }
+                        
+                        }
+                        else if(symbolTable.getInGlobal(lexer.getStringValue()) != null){
+                            if((((Variable) symbolTable.getInLocal(name.getName())).getType() == (((FuncDef) symbolTable.getInGlobal(lexer.getStringValue())).getType()))) {
+                            if (atom != null && ((Variable) symbolTable.getInLocal(lexer.getStringValue())).getObjNameArray().getNumber() != null) {
+                                error.signal("Invalid assignment.");
+                            }
+                            }
+                        }
+                        
+                        else if (((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType() != ((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType()) {
 
                             error.signal("The variable " + name.getName() + " can only receive values of " + ((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType().getcName() + ".");
                         } //x = vetor

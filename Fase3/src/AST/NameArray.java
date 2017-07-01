@@ -29,15 +29,15 @@ public class NameArray {
     
     public String getNameArray(){
         if(number != null){
-            return (name + "[" + number + "]");
+            return (name.getName() + "[" + number.getNumInt() + "]");
         }
         else{
             return name.getName();
         }
     }
     
-    public Name getName() {
-        return name;
+    public String getName() {
+        return name.getName();
     }
 
     public NumberExpr getNumber() {
