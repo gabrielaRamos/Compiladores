@@ -35,10 +35,13 @@ public class Atom extends Expr {
                 for (int i = 0; i < Declaration.var.size(); i++) {
                     for(int j= 0; j < Declaration.var.get(i).getIdList().getNameArray().size(); j++){
                         //percorrer
-                        if (Declaration.var.get(i).getIdList().getNameArray().get(j).equals(this.atom)){
-                        var = Declaration.var.get(i);
+                        if (Declaration.var.get(i).getIdList().getNameArray().get(j).getName().equals(this.atom)){
+                       // pw.out.println("A       "+ Declaration.var.get(i).getIdList().getNameArray().get(j).getName());
+                            var = Declaration.var.get(i);
                         //existe variable
                         flagVariable = 1;
+                        
+                        // pw.out.println("AQUI");
                     }
                             
                        // }

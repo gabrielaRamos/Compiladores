@@ -6,7 +6,7 @@ package AST;
 import java.util.ArrayList;
 
 public class Declaration {
-    //pq static??
+    
     public static ArrayList<ArrayDeclaration> var;
     
     public Declaration (ArrayList<ArrayDeclaration> var){
