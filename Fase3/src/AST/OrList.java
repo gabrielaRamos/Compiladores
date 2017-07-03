@@ -16,7 +16,7 @@ public class OrList {
     }
 
     public void genC(PW pw) {
-        pw.print("[");
+       
         for (int i = 0; i < orT.size(); i++) {
 
             if (i == orT.size() - 1) {
@@ -27,7 +27,7 @@ public class OrList {
             }
 
         }
-         pw.print("]");
+        
 
     }
 }

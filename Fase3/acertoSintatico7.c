@@ -15,9 +15,9 @@ void printValues(int t, int b, int d[3]){
    a = 9;   
    b = 5;   
    c = 4;   
-   d =    [1   ,2   ,3   ];   
+   d = [1   , 2   , 3];   
    t = a + b;   
    t = t * c / 2;   
    t = t + 2;   
-printValues   (   [t   ,b   ,d   ]   );   return    ;   
+printValues   (t   , b   , d   );   return    ;   
 }

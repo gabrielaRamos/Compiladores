@@ -31,7 +31,9 @@ public class ExprStmt extends SimpleStmt {
                 orT.genC(pw);
             }
             else {
+                pw.out.print("[");
                 orList.genC(pw);
+                pw.out.print("]");
             }
              pw.out.print(";");
              pw.println("");
