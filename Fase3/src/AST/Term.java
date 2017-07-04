@@ -20,7 +20,7 @@ public class Term extends Expr {
     public void genC(PW pw) {
         if (factor != null) {
             factor.get(0).genC(pw);
-            if (this.sinal != null) {
+            if (this.sinal != null && (PrintStmt.print == 0)) {
                 for (int i = 0; i < sinal.size(); i++) {
                     //percorre array para concatenar Term com o sinal *|/
                     pw.out.print(" " + sinal.get(i) + " ");

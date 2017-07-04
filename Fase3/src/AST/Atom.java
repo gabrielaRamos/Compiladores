@@ -31,6 +31,7 @@ public class Atom extends Expr {
         
         this.flagVariable = 0;
         if (PrintStmt.print == 1) {
+            
             if (Declaration.var != null) {
                 for (int i = 0; i < Declaration.var.size(); i++) {
                     for(int j= 0; j < Declaration.var.get(i).getIdList().getNameArray().size(); j++){

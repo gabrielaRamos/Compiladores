@@ -3,9 +3,9 @@
 #include <math.h>
 void printValues(int t, int b, int d[3]){
    printf("sum =");   
-   printf("%d ",  + "%d ", t + d   [1   ]);   
+   printf("%d ", t + d   [1   ]);   
    printf("\n");   
-   printf("%d ",  * "%d ", d   [0   ] * b);   
+   printf("%d ", d   [0   ] * b);   
    printf("\n");   
    return    ;   
 }void main(){
