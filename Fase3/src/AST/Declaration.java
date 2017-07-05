@@ -14,14 +14,16 @@ public class Declaration {
     }
     
     public void genC(PW pw){
+      
         pw.println("");
         for(ArrayDeclaration v: var){
  
             pw.print(v.getType().getcName() + " ");
             v.genCArray(pw);
-            pw.print(";");
-            pw.println("");
+            pw.out.print(";");
+            pw.out.println("");
         }
-        pw.println("");
+             
+      
     }
 }

@@ -132,6 +132,10 @@ public class Lexer {
                         || Character.isDigit(input[tokenPos])) {
                     ident.append(input[tokenPos]);
                     tokenPos++;
+                    if (input[tokenPos] == '-' || input[tokenPos] == '@' || input[tokenPos] == '_'
+                            || input[tokenPos] == '$' || input[tokenPos] == '#' || input[tokenPos] == '+') {
+                        error.signal("Character " + input[tokenPos] + " invalid");
+                    }
                 }
                 stringValue = ident.toString();
 // if identStr is in the list of keywords, it is a keyword !

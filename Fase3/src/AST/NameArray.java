@@ -1,8 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*Nome: Alessia Melo    RA:620289
+        Gabriela Ramos  RA:620360
+*/
 package AST;
 
 /**
@@ -21,9 +19,9 @@ public class NameArray {
     public void genC(PW pw){
         name.genC(pw);
         if (number != null){
-            pw.print("[");
+            pw.out.print("[");
             number.genC(pw);
-            pw.print("]");
+            pw.out.print("]");
         }
     }
     

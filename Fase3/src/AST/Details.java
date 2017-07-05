@@ -31,20 +31,20 @@ public class Details {
 
             if (this.parenteses != null) {
                 if (orList != null) {
-                    pw.print("(");
+                    pw.out.print("(");
                     orList.genC(pw);
-                    pw.print(")");
+                    pw.out.print(")");
                 } else {
-                    pw.print("( )");
+                    pw.out.print("( )");
                 }
             } else {
-                pw.print("[");
+                pw.out.print("[");
                 if (number != null) {
                     number.genC(pw);
                 } else if (name != null) {
                     name.genC(pw);
                 }
-                pw.print("]");
+                pw.out.print("]");
             }
         }
     }

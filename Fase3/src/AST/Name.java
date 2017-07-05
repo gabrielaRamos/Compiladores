@@ -16,7 +16,9 @@ public class Name {
     }
     
     public void genC(PW pw){
+        pw.add();
         pw.out.print(this.name);
+         pw.sub();
     }
     
     public String getName(){

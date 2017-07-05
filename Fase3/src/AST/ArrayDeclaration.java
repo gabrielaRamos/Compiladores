@@ -1,16 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*Nome: Alessia Melo    RA:620289
+        Gabriela Ramos  RA:620360
+*/
 package AST;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author Gabriela Ramos
- */
 public class ArrayDeclaration {
     private Type type;
     private IdList idList;

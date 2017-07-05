@@ -30,8 +30,8 @@ public class Atom extends Expr {
     public void genC(PW pw) {
         
         this.flagVariable = 0;
+        
         if (PrintStmt.print == 1) {
-            
             if (Declaration.var != null) {
                 for (int i = 0; i < Declaration.var.size(); i++) {
                     for(int j= 0; j < Declaration.var.get(i).getIdList().getNameArray().size(); j++){

@@ -23,7 +23,7 @@ public class OrList {
                 orT.get(i).genC(pw);
             } else {
                 orT.get(i).genC(pw);
-                pw.print(", ");
+                pw.out.print(", ");
             }
 
         }

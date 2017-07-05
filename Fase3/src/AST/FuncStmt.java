@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*Nome: Alessia Melo    RA:620289
+        Gabriela Ramos  RA:620360
  */
 package AST;
 
@@ -9,7 +7,8 @@ package AST;
  *
  * FuncStmt ::= Name’(’ [OrList] ’)”;’
  */
-public class FuncStmt extends SimpleStmt{
+public class FuncStmt extends SimpleStmt {
+
     private Name name;
     private OrList orList;
 
@@ -17,15 +16,18 @@ public class FuncStmt extends SimpleStmt{
         this.name = name;
         this.orList = orList;
     }
-    
+
     @Override
     public void genC(PW pw) {
+
         name.genC(pw);
-        pw.print("(");
-        if(orList != null){
+        pw.out.print("(");
+        if (orList != null) {
             orList.genC(pw);
         }
-        pw.print(");");
+        pw.out.print(");");
+        pw.println("");
+
     }
-    
+
 }

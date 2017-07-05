@@ -9,23 +9,25 @@ public class Program {
     // Program ::= ’program’ Name ’:’ Body ’end’
 
     private ArrayList<FuncDef> funcDef;
-    
+
     public Program(ArrayList<FuncDef> funcDef) {
         this.funcDef = funcDef;
-        
+
     }
+
     public void genC(PW pw) {
         pw.out.println("#include <stdio.h>");
         pw.out.println("#include <string.h>");
         pw.out.println("#include <math.h>");
+        pw.out.println();
 
         if (funcDef != null) {
-            for(FuncDef f : funcDef){
-               f.genC(pw);
+            for (FuncDef f : funcDef) {
+                f.genC(pw);
             }
         }
-     
+        
         pw.sub();
-      // pw.out.println("}");
+
     }
 }

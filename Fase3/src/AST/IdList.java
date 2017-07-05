@@ -20,7 +20,7 @@ public class IdList {
     public void genC(PW pw){
         nameArray.get(0).genC(pw);
         for(int i=1; i< nameArray.size(); i++){
-            pw.print(",");
+            pw.out.print(", ");
             nameArray.get(i).genC(pw);
         }
     }
