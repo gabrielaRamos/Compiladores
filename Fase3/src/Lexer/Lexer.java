@@ -4,6 +4,7 @@
 
 package Lexer;
 
+import Aux_.CompilerError;
 import java.util.*;
 
 //import AuxComp.*;

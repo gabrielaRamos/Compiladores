@@ -1,7 +1,8 @@
 /*Nome: Alessia Melo    RA:620289
         Gabriela Ramos  RA:620360
  */
-import Lexer.CompilerError;
+import Aux_.SymbolTable;
+import Aux_.CompilerError;
 import AST.*;
 import java.util.*;
 import Lexer.*;

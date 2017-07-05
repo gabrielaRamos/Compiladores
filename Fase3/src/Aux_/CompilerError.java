@@ -2,10 +2,11 @@
         Gabriela Ramos  RA:620360
  */
 
-package Lexer;
+package Aux_;
 
 
 import Lexer.*;
+import Lexer.Lexer;
 import java.io.*;
 
 public class CompilerError {
