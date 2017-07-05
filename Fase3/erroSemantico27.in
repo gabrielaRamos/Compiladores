@@ -1,0 +1,14 @@
+program erroSemantico27:
+
+# Metodo com mesmo nome que variavel
+def a():int{
+	return 2;
+}
+
+def main():void {
+	int a;
+	
+	return ;
+}
+
+end

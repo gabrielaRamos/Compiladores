@@ -1,7 +1,6 @@
 /*Nome: Alessia Melo    RA:620289
         Gabriela Ramos  RA:620360
-*/
-
+ */
 package AST;
 
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ public class Atom extends Expr {
     public static int flagVariable = 0;
     public int text;
     public Type type;
-    
 
     public Atom(String atom, Type type) {
         this.atom = atom;
@@ -26,26 +24,30 @@ public class Atom extends Expr {
         this.type = type;
     }
 
+    public String getAtom() {
+        return atom;
+    }
+
     @Override
     public void genC(PW pw) {
-        
+
         this.flagVariable = 0;
-        
+
         if (PrintStmt.print == 1) {
             if (Declaration.var != null) {
                 for (int i = 0; i < Declaration.var.size(); i++) {
-                    for(int j= 0; j < Declaration.var.get(i).getIdList().getNameArray().size(); j++){
+                    for (int j = 0; j < Declaration.var.get(i).getIdList().getNameArray().size(); j++) {
                         //percorrer
-                        if (Declaration.var.get(i).getIdList().getNameArray().get(j).getName().equals(this.atom)){
-                       // pw.out.println("A       "+ Declaration.var.get(i).getIdList().getNameArray().get(j).getName());
+                        if (Declaration.var.get(i).getIdList().getNameArray().get(j).getName().equals(this.atom)) {
+                            // pw.out.println("A       "+ Declaration.var.get(i).getIdList().getNameArray().get(j).getName());
                             var = Declaration.var.get(i);
-                        //existe variable
-                        flagVariable = 1;
-                        
-                        // pw.out.println("AQUI");
-                    }
-                            
-                       // }
+                            //existe variable
+                            flagVariable = 1;
+
+                            // pw.out.println("AQUI");
+                        }
+
+                        // }
                     }
                 }
             }

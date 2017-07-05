@@ -39,7 +39,7 @@ public class Compiler {
                     funcDef.add(funcDef());
                 }
                 if (symbolTable.getInGlobal("main") == null) {
-                    error.show("Source code must have a procedure called main");
+                    error.signal("Source code must have a procedure called main");
                     return new Program(funcDef);
                 }
                 if (lexer.token == Symbol.END) {
@@ -81,7 +81,7 @@ public class Compiler {
         if (lexer.token == Symbol.DEF) {
             lexer.nextToken();
             name = name();
-            if (symbolTable.getInGlobal(name) == null) {
+            if (symbolTable.getInGlobal(name.getName()) == null) {
 
                 if (lexer.token == Symbol.LEFTPAR) {
                     lexer.nextToken();
@@ -96,7 +96,7 @@ public class Compiler {
 
                             type = type();
                             FuncDef func = new FuncDef(type, name);
-                            System.out.println("Name fUNCTION" + name.getName());
+                           
                             symbolTable.putInGlobal(name.getName(), func);
 
                             if (lexer.token == Symbol.CURLYLEFTBRACE) {
@@ -129,7 +129,7 @@ public class Compiler {
                 }
             } else {
                 //DECLARAÇÃO DE VARIAVEL
-                error.show("function alredy statement");
+                error.signal("function alredy declared");
 
             }
         } else {
@@ -159,7 +159,8 @@ public class Compiler {
                 lexer.nextToken();
                 type = type();
                 name = nameArray();
-                System.out.println("ARG  " + name.getNameArray());
+                
+                
                 if (symbolTable.getInLocal(name.getName()) == null) {
                     var = new Variable(type, name);
                     symbolTable.putInLocal(name.getName(), var);
@@ -258,9 +259,9 @@ public class Compiler {
                 if (symbolTable.getInLocal(var.getName()) == null) {
 
                     symbolTable.putInLocal(var.getName(), var);
-                    System.out.print("\n\n\nNAME " + var.getName());
+                   
                 } else {
-                    error.signal("Variable was already declared");
+                    error.signal("Variable " + var.getName() + " was already declared");
                 }
             }
         }
@@ -278,12 +279,12 @@ public class Compiler {
                 for (int i = 0; i < arrayDec.size(); i++) {
                     for (int j = 0; j < arrayDec.get(i).getIdList().getNameArray().size(); j++) {
                         var = new Variable(arrayDec.get(i).getType(), arrayDec.get(i).getIdList().getNameArray().get(j));
-                        if (symbolTable.getInLocal(var) == null) {
+                        if (symbolTable.getInLocal(var.getName()) == null) {
 
                             symbolTable.putInLocal(var.getName(), var);
-                            System.out.print("\n\n\nNAME " + var.getObjNameArray().getNameArray());
+                            
                         } else {
-                            error.signal("Variable was already declared");
+                            error.signal("Variable " + var.getName() + " was already declared");
                         }
                     }
                 }
@@ -428,8 +429,15 @@ public class Compiler {
                 if (lexer.token == Symbol.NOT || lexer.token == Symbol.MINUS || lexer.token == Symbol.PLUS || lexer.token == Symbol.IDENT || lexer.token == Symbol.CHARACTER
                         || lexer.token == Symbol.STRING || lexer.token == Symbol.NUMBER || lexer.token == Symbol.TRUE || lexer.token == Symbol.FALSE) {
 
-                    // x = numero
-                    if (lexer.token == Symbol.NUMBER) {
+                    // x = boolean
+                    if (lexer.token == Symbol.TRUE || lexer.token == Symbol.FALSE) {
+
+                        if (var.getType() != Type.booleanType) {
+                            error.signal("The variable " + name.getName() + " can't recieve values of type TRUE or FALSE");
+                        }
+
+                    } // x = numero
+                    else if (lexer.token == Symbol.NUMBER) {
                         //x tipo float = 1;
                         if (((Variable) symbolTable.getInLocal(name.getName())).getType() == Type.floatType && lexer.isIntOrFloat() == 0) {
                             error.signal("The variable " + name.getName() + " only can receive values of float type.");
@@ -458,56 +466,59 @@ public class Compiler {
                                 }
 
                             } //else if (((Variable) symbolTable.getInLocal(name.getName())).getObjNameArray().getNumber()!= null && ) {
-                                
-                            
 
-                            } else if (((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType() != ((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType()) {
+                        } else if (((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType() != ((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType()) {
 
-                                error.signal("The variable " + name.getName() + " can only receive values of " + ((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType().getcName() + ".");
-                            } //x = vetor
-                            else if (((Variable) symbolTable.getInLocal(lexer.getStringValue())).getObjNameArray().getNumber() == null && ((Variable) symbolTable.getInLocal(name.getName())).getObjNameArray().getNumber() != null) {
+                            error.signal("The variable " + name.getName() + " can only receive values of " + ((Variable) symbolTable.getInLocal(lexer.getStringValue())).getType().getcName() + ".");
+                        } //x = vetor
+                        else if (((Variable) symbolTable.getInLocal(lexer.getStringValue())).getObjNameArray().getNumber() == null && ((Variable) symbolTable.getInLocal(name.getName())).getObjNameArray().getNumber() != null) {
 
-                                error.signal("The variable " + name.getName() + " can not receive an array.");
-                            }
-                        } else if (lexer.token == Symbol.STRING && ((Variable) symbolTable.getInLocal(name.getName())).getType() != Type.stringType) {
-                            error.signal("The variable " + name.getName() + " can only receive values of string type.");
-                        } else if (lexer.token == Symbol.CHAR && ((Variable) symbolTable.getInLocal(name.getName())).getType() != Type.charType) {
-                            error.signal("The variable " + name.getName() + " can only receive values of char type.");
-                        } else if ((lexer.token == Symbol.TRUE || lexer.token == Symbol.FALSE) && ((Variable) symbolTable.getInLocal(name.getName())).getType() != Type.booleanType) {
-                            error.signal("The variable " + name.getName() + " can only receive values 'true' or 'false'.");
+                            error.signal("The variable " + name.getName() + " can not receive an array.");
                         }
-                        orT = orTest();
-                        System.out.print(lexer.token);
-                    } else if (lexer.token == Symbol.LEFTSQBRACKET) {
-                        lexer.nextToken();
-                        orList = orList();
-
-                        if (lexer.token == Symbol.RIGHTSQBRACKET) {
-                            lexer.nextToken();
-                        } else {
-                            error.signal("] expected.");
-                        }
-                    } else {
-                        error.signal("orTest or ExprList exected.");
+                    } else if (lexer.token == Symbol.STRING && ((Variable) symbolTable.getInLocal(name.getName())).getType() != Type.stringType) {
+                        error.signal("The variable " + name.getName() + " can't receive values of string type.");
+                    } else if (lexer.token == Symbol.CHAR && ((Variable) symbolTable.getInLocal(name.getName())).getType() != Type.charType) {
+                        error.signal("The variable " + name.getName() + " can't receive values of char type.");
+                    } else if ((lexer.token == Symbol.TRUE || lexer.token == Symbol.FALSE) && ((Variable) symbolTable.getInLocal(name.getName())).getType() != Type.booleanType) {
+                        error.signal("The variable " + name.getName() + " can't receive values 'true' or 'false'.");
                     }
-                    if (lexer.token == Symbol.SEMICOLON) {
+                    orT = orTest();
+                    
+                } else if (lexer.token == Symbol.LEFTSQBRACKET) {
+                    lexer.nextToken();
+                    orList = orList();
 
-                        lexer.nextToken();
-                        System.out.println("VARRR " + var);
-                        return new ExprStmt(var, orT, orList);
-
-                    } else {
-                        error.signal("; expected");
+                    if (orList.getSize() > var.getObjNameArray().getNumber().getNumInt()) {
+                        error.signal("Array limit out of bounds.");
                     }
+
+                    if (lexer.token == Symbol.RIGHTSQBRACKET) {
+                        lexer.nextToken();
+                    } else {
+                        error.signal("] expected.");
+                    }
+                } else {
+                    error.signal("orTest or ExprList exected.");
+                }
+                if (lexer.token == Symbol.SEMICOLON) {
+
+                    lexer.nextToken();
+                    
+                    return new ExprStmt(var, orT, orList);
 
                 } else {
-                    error.signal("= expected.");
+                    error.signal("; expected");
                 }
+
+            } else {
+                error.signal("= expected.");
             }
-            error.signal("Right operand expected");
-            return null;
         }
-        //OrTest ::= AndTest {’or’ AndTest}
+        error.signal("Right operand expected");
+        return null;
+    }
+    //OrTest ::= AndTest {’or’ AndTest}
+
     public OrTest orTest() {
         ArrayList<AndTest> andT = new ArrayList<AndTest>();
 
@@ -547,14 +558,12 @@ public class Compiler {
         }
         comp = comparison();
 
-        return new NotTest(not, comp);
-        /*
-            if (comp.getType() == Type.stringType) {
-                error.signal("Not is not allowed with strings");
-            }
-            return new NotTest(not, comp);*/
+        if (not != null && comp.getType() == Type.stringType) {
+            error.signal("Not is not allowed with strings");
+        }
 
-        //  return new NotTest(not, comparison());
+        return new NotTest(not, comp);
+
     }
 
     //Comparison ::= Expr [CompOp Expr]
@@ -581,6 +590,7 @@ public class Compiler {
         return new Comparison(expr1, expr2, op);
     }
 
+    //Expr ::= Term {(’+’ | ’-’) Term}
     public Expr expr() {
         ArrayList<Term> term = new ArrayList<Term>();
         ArrayList<Character> sinal = new ArrayList<Character>();
@@ -597,12 +607,17 @@ public class Compiler {
             term.add(term());
 
         }
-        /*
+
         for (int i = 0; i < term.size(); i++) {
             if (term.get(0).getType().getcName().equals(term.get(i).getType().getcName()) == false) {
                 error.signal("Types are different");
             }
-        }*/
+
+            /*if (term.get(i).getType() == Type.booleanType) {
+                error.signal("Operator not allowed with bollean type.");
+            }*/
+        }
+
         return new CompositeExpr(term, sinal);
     }
 
@@ -668,6 +683,7 @@ public class Compiler {
     public AtomExpr atomExpr() {
         Atom atom = null;
         Details details = null;
+        Variable var = null;
 
         atom = atom();
 
@@ -675,6 +691,14 @@ public class Compiler {
 
             details = details();
 
+        }
+
+        var = (Variable) symbolTable.getInLocal(atom.getAtom());
+
+        if (details != null) {
+            if (var.getObjNameArray().getNumber().getNumInt() < details.getNumber().getNumInt() || details.getNumber().getNumInt() < 0) {
+                error.signal("Array limit out of bounds.");
+            }
         }
 
         return new AtomExpr(atom, details);
@@ -693,12 +717,12 @@ public class Compiler {
             if (var != null) {
                 return new Atom(name.getName(), var.getType());
             } else {
-                FuncDef func = (FuncDef) symbolTable.getInGlobal(name.getName());;
+                FuncDef func = (FuncDef) symbolTable.getInGlobal(name.getName());
                 if (func != null) {
 
                     return new Atom(name.getName(), func.getType());
                 } else {
-                    error.show("Variable not statement");
+                    error.signal("Variable not declared.");
                     return null;
                 }
             }
@@ -742,7 +766,6 @@ public class Compiler {
             if (lexer.token == Symbol.NUMBER) {
                 number = numberExpr();
 
-                //System.out.println("NUMBERRRRR" + number.getNumInt());
                 if (number.getType() instanceof FloatType) {
                     error.signal("Array size can't be float.");
                 } else {

@@ -1,3 +1,7 @@
+/*Nome: Alessia Melo    RA:620289
+        Gabriela Ramos  RA:620360
+ */
+
 package Lexer;
 
 
@@ -29,15 +33,15 @@ public class CompilerError {
 // is goPreviousToken is true, the error is signalled at the line of the
 // previous token, not the last one.
         if (goPreviousToken) {
-            out.println("Error at line " + lexer.getLineNumberBeforeLastToken() + ": ");
-            out.println(lexer.getLineBeforeLastToken());
+            System.out.println("Error at line " + lexer.getLineNumberBeforeLastToken() + ": ");
+            System.out.println(lexer.getLineBeforeLastToken());
         } else {
-            out.println("Error at line " + lexer.getLineNumber() + ": ");
-            out.println(lexer.getCurrentLine());
+            System.out.println("Error at line " + lexer.getLineNumber() + ": ");
+            System.out.println(lexer.getCurrentLine());
         }
-        out.println(strMessage);
-        out.flush();
-        if (out.checkError()) {
+        System.out.println(strMessage);
+        System.out.flush();
+        if (System.out.checkError()) {
             System.out.println("Error in signaling an error");
         }
         thereWasAnError = true;
@@ -45,8 +49,9 @@ public class CompilerError {
 
     public void signal(String strMessage) {
         show(strMessage);
-        out.flush();
+        System.out.flush();
         thereWasAnError = true;
+        
         throw new RuntimeException();
     }
     private Lexer lexer;

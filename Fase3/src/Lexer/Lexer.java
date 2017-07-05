@@ -1,3 +1,7 @@
+/*Nome: Alessia Melo    RA:620289
+        Gabriela Ramos  RA:620360
+ */
+
 package Lexer;
 
 import java.util.*;
@@ -144,6 +148,7 @@ public class Lexer {
                     token = Symbol.IDENT;
                 } else {
                     token = value;
+                    stringValue = null;
                 }
             } else if (Character.isDigit(ch)) {
 // get a number
@@ -296,7 +301,7 @@ public class Lexer {
                 }
             }
         }
-        System.out.println(token);
+        //System.out.println(token);
         beforeLastTokenPos = lastTokenPos;
         lastTokenPos = tokenPos - 1;
     }// return the line number of the last token got with getToken()
